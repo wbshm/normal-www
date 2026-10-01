@@ -1,0 +1,33 @@
+[
+  {
+    "slug": "anglepop",
+    "category": "game",
+    "status": "coming-soon",
+    "icon": "/images/anglepop/icon.png",
+    "screenshots": [
+      { "src": "/images/anglepop/home.webp", "en": "A quiet place to start", "zh": "从这里，轻松开始" },
+      { "src": "/images/anglepop/gameplay.webp", "en": "Find your perfect angle", "zh": "找到刚刚好的角度" },
+      { "src": "/images/anglepop/levels.webp", "en": "A new puzzle around every corner", "zh": "每一关，都有新的可能" }
+    ],
+    "appStoreUrl": "https://apps.apple.com/app/id6813855087",
+    "platform": "iPhone",
+    "requirement": "iOS 17+",
+    "accent": "#d5f5eb",
+    "locales": {
+      "en": {
+        "name": "Anglepop",
+        "tagline": "One shot. Just right.",
+        "description": "Pick your starting point. Find your angle. Clear every block with a single, satisfying shot.",
+        "highlights": ["288 main levels", "A daily challenge", "Light & dark themes"],
+        "screenshotNote": "Actual in-app screenshots, shown in Simplified Chinese. Anglepop also supports English."
+      },
+      "zh": {
+        "name": "Anglepop",
+        "tagline": "弹一下，刚刚好。",
+        "description": "自由选起点，找到合适的角度。让小球沿着反弹路线，一次发射，清除全部目标。",
+        "highlights": ["288 个主线关卡", "每日挑战", "亮暗主题"],
+        "screenshotNote": "实际 App 截图，展示简体中文界面。Anglepop 同时支持英文。"
+      }
+    }
+  }
+]

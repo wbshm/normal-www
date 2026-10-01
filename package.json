@@ -1,0 +1,16 @@
+{
+  "name": "normal-apps",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "build": "astro build",
+    "preview": "astro preview",
+    "verify": "node scripts/verify-site.mjs"
+  },
+  "dependencies": { "astro": "7.3.5" },
+  "devDependencies": { "@astrojs/check": "0.9.10", "typescript": "~6.0.3" }
+}

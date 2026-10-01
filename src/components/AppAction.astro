@@ -1,0 +1,10 @@
+---
+import type { App } from '../lib/apps';
+import type { Locale } from '../data/site';
+import { copy } from '../lib/i18n';
+import Arrow from './Arrow.astro';
+interface Props { app: App; locale: Locale; }
+const { app, locale } = Astro.props;
+const t = copy[locale];
+---
+{app.status === 'available' ? <a class="button primary" href={app.appStoreUrl}>{t.download}<Arrow diagonal /></a> : <span class="release-status"><span class="status-dot" aria-hidden="true"></span>{app.status === 'archived' ? t.archived : t.comingSoon}</span>}

@@ -1,0 +1,22 @@
+---
+import type { App } from '../lib/apps';
+import type { Locale } from '../data/site';
+import { copy } from '../lib/i18n';
+import { pageUrl, withBase } from '../lib/urls';
+import Arrow from './Arrow.astro';
+import AppAction from './AppAction.astro';
+interface Props { app: App; locale: Locale; }
+const { app, locale } = Astro.props;
+const t = copy[locale];
+const translation = app.locales[locale];
+---
+<div class="container product-page">
+  <a class="breadcrumb" href={`${pageUrl(locale)}#apps`}><span aria-hidden="true">←</span>{t.back}</a>
+  <section class="product-hero" style={`--app-accent: ${app.accent}`}>
+    <div class="product-hero-copy"><div class="product-meta"><span>{t[app.category]} · {app.platform} · {app.requirement}</span></div><img class="app-icon" src={withBase(app.icon)} alt="" width="88" height="88" /><h1>{translation.name}</h1><p class="product-tagline">{translation.tagline}</p><p class="product-description">{translation.description}</p><AppAction app={app} locale={locale} /><div class="product-legal-links"><a href={pageUrl(locale, app.slug, 'privacy')}>{t.privacy}</a><span aria-hidden="true">·</span><a href={pageUrl(locale, app.slug, 'support')}>{t.support}</a></div></div>
+    <div class="product-hero-art"><img src={withBase(app.icon)} alt="" width="380" height="380" /><span class="art-label" aria-hidden="true">{translation.tagline}</span></div>
+  </section>
+  <section class="product-story prose"><slot /></section>
+  {app.screenshots.length > 0 && <section class="screenshot-section"><div class="section-heading"><h2>{t.screenshots}</h2></div><div class="screenshot-grid">{app.screenshots.map((shot) => <figure><div class="screenshot-frame"><img src={withBase(shot.src)} alt={`${translation.name} — ${shot[locale]}`} width="780" height="1688" loading="lazy" /></div><figcaption>{shot[locale]}</figcaption></figure>)}</div><p class="screenshot-note">{translation.screenshotNote ?? t.screenshotNote}</p></section>}
+  <section class="help-panel"><div><h2>{t.more}</h2><p>{t.moreBody}</p></div><div class="help-links"><a class="text-link" href={pageUrl(locale, app.slug, 'privacy')}>{t.privacy}<Arrow diagonal /></a><a class="text-link" href={pageUrl(locale, app.slug, 'support')}>{t.support}<Arrow diagonal /></a></div></section>
+</div>

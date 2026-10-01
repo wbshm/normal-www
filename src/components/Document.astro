@@ -1,0 +1,16 @@
+---
+import type { MarkdownHeading } from 'astro';
+import type { App } from '../lib/apps';
+import type { Locale, PageKind } from '../data/site';
+import { copy } from '../lib/i18n';
+import { pageUrl, withBase } from '../lib/urls';
+interface Props { app: App; locale: Locale; kind: Exclude<PageKind, 'overview'>; title: string; description: string; headings: MarkdownHeading[]; updated?: string; }
+const { app, locale, kind, title, description, headings, updated } = Astro.props;
+const t = copy[locale];
+const formattedDate = updated ? new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'zh-CN', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${updated}T00:00:00Z`)) : undefined;
+---
+<div class="container document-page">
+  <a class="breadcrumb" href={pageUrl(locale, app.slug)}><span aria-hidden="true">←</span>{app.locales[locale].name}</a>
+  <div class="document-header"><p class="eyebrow">{kind === 'privacy' ? t.privacyEyebrow : t.supportEyebrow}</p><h1>{title}</h1><p class="document-description">{description}</p>{formattedDate && <p class="effective-date">{t.effective}: <time datetime={updated}>{formattedDate}</time></p>}</div>
+  <div class="document-grid"><aside class="document-sidebar"><a class="sidebar-app" href={pageUrl(locale, app.slug)}><img src={withBase(app.icon)} width="38" height="38" alt="" />{app.locales[locale].name}</a><nav class="document-nav" aria-label={locale === 'en' ? 'App pages' : 'App 页面'}><a href={pageUrl(locale, app.slug)}>{t.about}</a><a href={pageUrl(locale, app.slug, 'privacy')} aria-current={kind === 'privacy' ? 'page' : undefined}>{t.privacy}</a><a href={pageUrl(locale, app.slug, 'support')} aria-current={kind === 'support' ? 'page' : undefined}>{t.support}</a></nav><nav class="table-of-contents" aria-label={t.contents}><p>{t.contents}</p>{headings.filter((heading) => heading.depth === 2).map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}</nav></aside><article class="prose document-content"><slot /></article></div>
+</div>

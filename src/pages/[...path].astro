@@ -1,0 +1,48 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { apps, type App } from '../lib/apps';
+import { locales, kinds, type Locale } from '../data/site';
+import { copy } from '../lib/i18n';
+import { pagePath } from '../lib/urls';
+import Layout from '../layouts/Layout.astro';
+import Home from '../components/Home.astro';
+import Product from '../components/Product.astro';
+import Document from '../components/Document.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('pages');
+  const routes: { params: { path: string | undefined }; props: { locale: Locale; app?: App; entry?: CollectionEntry<'pages'> } }[] = [];
+  for (const locale of locales) {
+    routes.push({ params: { path: locale === 'en' ? undefined : 'zh' }, props: { locale } });
+    for (const app of apps) {
+      for (const kind of kinds) {
+        const matching = entries.filter((entry) => entry.data.app === app.slug && entry.data.locale === locale && entry.data.kind === kind);
+        if (matching.length !== 1) throw new Error(`Expected exactly one ${locale}/${app.slug}/${kind} Markdown document; found ${matching.length}.`);
+        const entry = matching[0];
+        if (kind === 'privacy' && !entry.data.updated) throw new Error(`${entry.id}: privacy policies require an effective date.`);
+        routes.push({ params: { path: pagePath(locale, app.slug, kind).replace(/^\/|\/$/g, '') }, props: { locale, app, entry } });
+      }
+    }
+  }
+  for (const entry of entries) {
+    if (!apps.some((app) => app.slug === entry.data.app)) throw new Error(`${entry.id}: unknown app slug ${entry.data.app}.`);
+  }
+  for (const app of apps) {
+    const policies = entries.filter((entry) => entry.data.app === app.slug && entry.data.kind === 'privacy');
+    if (new Set(policies.map((entry) => entry.data.updated)).size !== 1) throw new Error(`${app.slug}: English and Chinese policies must share an effective date.`);
+  }
+  return routes;
+}
+
+interface Props { locale: Locale; app?: App; entry?: CollectionEntry<'pages'>; }
+const { locale, app, entry } = Astro.props;
+const rendered = entry ? await render(entry) : undefined;
+const Content = rendered?.Content;
+const t = copy[locale];
+const title = entry ? `${entry.data.title} | Normal Apps` : locale === 'en' ? 'Normal Apps — Small apps. A little joy.' : 'Normal Apps — 小小的 App，一点点快乐。';
+const description = entry?.data.description ?? t.intro;
+---
+<Layout locale={locale} title={title} description={description} slug={app?.slug} kind={entry?.data.kind} image={app?.icon}>
+  {!app && <Home locale={locale} />}
+  {app && entry && Content && (entry.data.kind === 'overview' ? <Product app={app} locale={locale}><Content /></Product> : <Document app={app} locale={locale} kind={entry.data.kind} title={entry.data.title} description={entry.data.description} headings={rendered?.headings ?? []} updated={entry.data.updated}><Content /></Document>)}
+</Layout>
