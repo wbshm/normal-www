@@ -20,7 +20,7 @@ Anglepop stores game progress and preferences locally on your device using iOS a
 - Completed main-level identifiers.
 - The current daily challenge's date, level, attempts, and completion status.
 - Hint-card inventory and the date of the last free claim.
-- Music, sound, vibration, theme, magnifier, and History Trails display preferences.
+- Music, sound, vibration, theme, magnifier, and History Trajectories display preferences.
 
 The most recent failed route and collision points for a level are kept in memory during the current app session. They are not a permanent history archive.
 

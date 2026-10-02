@@ -24,6 +24,6 @@ Missed a block? The whole puzzle resets, ready for another idea. There is no lim
 
 The puzzles are built into the app. Play without creating an account; your progress and preferences stay on your device. Purchases and restoring purchases use Apple's App Store services and may require a connection.
 
-History Trails is an optional, one-time in-app purchase. It lets you see the most recent failed route for a level during the current app session. It unlocks a feature, rather than creating a permanent archive of every shot.
+History Trajectories is an optional, one-time in-app purchase. It lets you see the most recent failed route for a level during the current app session. It unlocks a feature, rather than creating a permanent archive of every shot.
 
 Anglepop is made for iPhone, requires iOS 17 or later, and includes English and Simplified Chinese interfaces.

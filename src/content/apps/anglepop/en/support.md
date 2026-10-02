@@ -38,15 +38,15 @@ Main-level progress, daily results, hint inventory, and settings are saved on yo
 
 Deleting the app may remove your local progress. A device backup, if available, is managed by iOS and your backup settings. Restoring a purchase does not restore completed levels or hint inventory.
 
-## What does History Trails unlock?
+## What does History Trajectories unlock?
 
-History Trails is an optional **one-time purchase**, not a subscription. It lets you display the most recent failed route and collision points for a level during the current app session. The trail is not a permanent archive and is cleared when the app session ends.
+History Trajectories is an optional **one-time purchase**, not a subscription. It lets you display the most recent failed route and collision points for a level during the current app session. The trail is not a permanent archive and is cleared when the app session ends.
 
-Open the locked History Trails entry in Settings to see the feature explanation, local App Store price, purchase button, and **Restore Purchases**. Once unlocked, you can switch its display on or off in Settings.
+Open the locked History Trajectories entry in Settings to see the feature explanation, local App Store price, purchase button, and **Restore Purchases**. Once unlocked, you can switch its display on or off in Settings.
 
 ## How do I restore a purchase?
 
-Use the Apple Account that originally bought History Trails, then open its unlock page and select **Restore Purchases**. An internet connection may be required. Apple verifies the purchase; a refunded or revoked purchase no longer unlocks the feature.
+Use the Apple Account that originally bought History Trajectories, then open its unlock page and select **Restore Purchases**. An internet connection may be required. Apple verifies the purchase; a refunded or revoked purchase no longer unlocks the feature.
 
 If restoration fails, check your connection and Apple Account, then contact us with the error message. Requests for App Store refunds can be submitted through [Apple's refund service](https://reportaproblem.apple.com/).
 
