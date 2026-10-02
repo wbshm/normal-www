@@ -15,7 +15,12 @@ const visibleApps = apps.filter((app) => app.status !== 'archived');
   <div class="eyebrow"><span class="tiny-dot" aria-hidden="true"></span>{t.eyebrow}</div>
   <h1>{t.hero}<br /><span class="serif-accent">{t.heroAccent}</span></h1>
   <div class="hero-bottom"><p>{t.intro}</p><a class="text-link" href="#apps">{t.explore}<Arrow /></a></div>
-  <div class="orbit-mark" aria-hidden="true"><span class="orbit-ball"></span><span class="orbit-line"></span><span class="orbit-block"></span></div>
+  <svg class="hero-play-mark" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+    <path d="M28 126 65 44 113 94 142 49" fill="none" stroke="#7abbac" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="m51 46 28-5" fill="none" stroke="#ffcf49" stroke-width="10" stroke-linecap="round" />
+    <path d="m99 97 28-6" fill="none" stroke="#96d8c4" stroke-width="10" stroke-linecap="round" />
+    <circle cx="28" cy="126" r="10" fill="#ffcf49" />
+  </svg>
 </section>
 <section id="apps" class="collection container" aria-labelledby="collection-heading">
   <div class="section-heading"><div><p class="eyebrow">{t.catalogue}</p><h2 id="collection-heading">{t.collection}</h2></div><span class="collection-count">{String(visibleApps.length).padStart(2, '0')}</span></div>

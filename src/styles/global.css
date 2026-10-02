@@ -212,45 +212,13 @@ p {
   transform: translateX(3px);
 }
 
-.orbit-mark {
+.hero-play-mark {
   position: absolute;
   right: 30px;
   top: 140px;
-  width: 140px;
-  height: 180px;
-  transform: rotate(18deg);
+  width: 160px;
+  height: 160px;
   pointer-events: none;
-}
-
-.orbit-ball {
-  position: absolute;
-  top: 119px;
-  left: 12px;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background: var(--yellow);
-}
-
-.orbit-line {
-  position: absolute;
-  top: 31px;
-  left: 43px;
-  width: 3px;
-  height: 109px;
-  background: #7abbac;
-  transform: rotate(32deg);
-}
-
-.orbit-block {
-  position: absolute;
-  top: 30px;
-  right: 15px;
-  width: 60px;
-  height: 15px;
-  border-radius: 10px;
-  background: #96d8c4;
-  transform: rotate(-18deg);
 }
 
 .collection {
@@ -943,10 +911,11 @@ p {
     font-size: 86px;
   }
 
-  .orbit-mark {
+  .hero-play-mark {
     right: 0;
     top: 155px;
-    transform: scale(.7) rotate(18deg);
+    width: 120px;
+    height: 120px;
   }
 
   .featured-copy {
@@ -1087,7 +1056,7 @@ p {
     gap: 45px;
   }
 
-  .orbit-mark {
+  .hero-play-mark {
     display: none;
   }
 
