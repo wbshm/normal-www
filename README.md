@@ -1,6 +1,6 @@
 # Normal Apps
 
-独立开发者的中英双语产品官网。首版收录 Anglepop，提供 App 介绍、独立隐私政策和用户支持页面。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
+独立开发者的中英双语产品官网。收录 Anglepop 和打卡鸭（CheckInDuck），每款 App 提供介绍、独立隐私政策和用户支持页面。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
 
 ## 本地开发
 
@@ -30,6 +30,9 @@ npm run preview
 | Anglepop | https://wbshm.github.io/normal-www/apps/anglepop/ | https://wbshm.github.io/normal-www/zh/apps/anglepop/ |
 | 隐私政策 | https://wbshm.github.io/normal-www/apps/anglepop/privacy/ | https://wbshm.github.io/normal-www/zh/apps/anglepop/privacy/ |
 | 用户支持 | https://wbshm.github.io/normal-www/apps/anglepop/support/ | https://wbshm.github.io/normal-www/zh/apps/anglepop/support/ |
+| 打卡鸭 | https://wbshm.github.io/normal-www/apps/checkinduck/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/ |
+| 打卡鸭隐私政策 | https://wbshm.github.io/normal-www/apps/checkinduck/privacy/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/privacy/ |
+| 打卡鸭用户支持 | https://wbshm.github.io/normal-www/apps/checkinduck/support/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/support/ |
 
 GitHub 仓库中选择 **Settings → Pages → Source → GitHub Actions**。提交到 `main` 后，工作流执行类型检查、构建、静态验证，再发布到 Pages。PR 只检查、不发布，也可在 Actions 中手动运行。
 
@@ -48,7 +51,7 @@ SITE_ORIGIN=https://wbshm.github.io npm run verify
    - `category`：`game` 或 `tool`。
    - `status`：`coming-soon`、`available` 或 `archived`。
    - `icon`、`screenshots`：文件放在 `public/images/{slug}/`，配置用 `/images/...` 逻辑路径。
-   - `appStoreUrl`、`platform`、`requirement`、六位十六进制 `accent`。
+   - `platform`、`requirement`、六位十六进制 `accent`。`appStoreUrl` 可省略；状态为 `available` 时必须填写已核实的 App Store 地址。
    - `locales.en` 和 `locales.zh`：名称、标语、简介、亮点。截图提供双语说明。
 2. 添加六份 Markdown：`src/content/apps/{slug}/{en,zh}/{overview,privacy,support}.md`。
 3. frontmatter 填 `app`、`locale`、`kind`、`title`、`description`。双语政策另填相同的 `updated: "YYYY-MM-DD"` 生效日期。
@@ -74,3 +77,7 @@ App Store Connect 填英文政策与支持 URL；Marketing URL 可填英文介�
 ## 素材来源
 
 图标来自 Anglepop 现行 `AppIcon.png`；截图来自实际运行的首页、游戏中和选关界面。网站仅压缩截图为 WebP，未改 App 工程。使用系统字体，不加载远程字体、广告或分析脚本。
+
+打卡鸭的介绍、权限边界、隐私政策和支持内容来自 [CheckInDuck-WWW](https://github.com/wbshm/CheckInDuck-WWW)，迁入版本为 `0b89b0ae808b589e06b322c8832ea4f3ec448a3d`。使用源仓库 `appstore.png` 图标和六张 `screen/img_*.png` 实际截图，截图压缩为 WebP，保留英文界面。隐私政策沿用原生效日期 `2026-03-29`，新增对应中文版本。iOS 16 最低版本依据本机 CheckInDuck App 工程的部署设置确认。
+
+源网站没有公开下载按钮或商店地址，打卡鸭暂设为 `coming-soon`。确认商店页可公开访问后，填写 `appStoreUrl` 并设为 `available`。原仓库和旧站地址未修改；新地址实际部署后，再更新 App Store Connect 或 App 内的官网、隐私与支持入口。迁入详情见 [打卡鸭迁入记录](docs/CHECKINDUCK-MIGRATION.md)。

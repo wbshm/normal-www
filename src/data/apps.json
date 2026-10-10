@@ -29,5 +29,70 @@
         "screenshotNote": "实际 App 截图，展示简体中文界面。Anglepop 同时支持英文。"
       }
     }
+  },
+  {
+    "slug": "checkinduck",
+    "category": "tool",
+    "status": "coming-soon",
+    "icon": "/images/checkinduck/icon.png",
+    "screenshots": [
+      {
+        "src": "/images/checkinduck/dashboard.webp",
+        "en": "Today’s habits, at a glance",
+        "zh": "今天的习惯，一眼看清"
+      },
+      {
+        "src": "/images/checkinduck/calendar.webp",
+        "en": "Small steps, day after day",
+        "zh": "每一天的小小积累"
+      },
+      {
+        "src": "/images/checkinduck/create-task.webp",
+        "en": "A habit that fits your day",
+        "zh": "设定适合自己的打卡规则"
+      },
+      {
+        "src": "/images/checkinduck/widget.webp",
+        "en": "Your progress, on the Home Screen",
+        "zh": "桌面上，也能看到进度"
+      },
+      {
+        "src": "/images/checkinduck/onboarding.webp",
+        "en": "A little help getting started",
+        "zh": "从这里，开始一个好习惯"
+      },
+      {
+        "src": "/images/checkinduck/premium.webp",
+        "en": "More room for your routines",
+        "zh": "为更多习惯，留出空间"
+      }
+    ],
+    "platform": "iPhone",
+    "requirement": "iOS 16+",
+    "accent": "#fff0bf",
+    "locales": {
+      "en": {
+        "name": "CheckInDuck",
+        "tagline": "Little habits. Every day.",
+        "description": "Choose an app, set a daily goal, and let your usage count toward a check-in. Gentle reminders and a calendar help you keep going.",
+        "highlights": [
+          "Automatic check-ins",
+          "Calendar & notes",
+          "Home Screen widgets"
+        ],
+        "screenshotNote": "Original in-app screenshots from CheckInDuck, shown in English."
+      },
+      "zh": {
+        "name": "打卡鸭",
+        "tagline": "每天一点点，好习惯慢慢来。",
+        "description": "选一个 App，定下每天的小目标。使用时长达标，就自动打卡；配合截止提醒和日历记录，让坚持轻松一点。",
+        "highlights": [
+          "使用达标，自动打卡",
+          "日历记录与备注",
+          "桌面小组件"
+        ],
+        "screenshotNote": "来自打卡鸭原官网的实际 App 截图，展示英文界面。"
+      }
+    }
   }
 ]

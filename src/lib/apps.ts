@@ -15,11 +15,14 @@ const appSchema = z.object({
   status: z.enum(['coming-soon', 'available', 'archived']),
   icon: localAsset,
   screenshots: z.array(z.object({ src: localAsset, en: z.string(), zh: z.string() })),
-  appStoreUrl: z.url().startsWith('https://apps.apple.com/'),
+  appStoreUrl: z.url().startsWith('https://apps.apple.com/').optional(),
   platform: z.string().min(1),
   requirement: z.string().min(1),
   accent: z.string().regex(/^#[a-fA-F0-9]{6}$/),
   locales: z.object({ en: translation, zh: translation }),
+}).refine((app) => app.status !== 'available' || Boolean(app.appStoreUrl), {
+  message: 'Available apps require a verified App Store URL.',
+  path: ['appStoreUrl'],
 });
 
 export const apps = z.array(appSchema).parse(rawApps);

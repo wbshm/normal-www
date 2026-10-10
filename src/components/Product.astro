@@ -10,7 +10,7 @@ const { app, locale } = Astro.props;
 const t = copy[locale];
 const translation = app.locales[locale];
 ---
-<div class="container product-page">
+<div class="container product-page" data-app={app.slug}>
   <a class="breadcrumb" href={`${pageUrl(locale)}#apps`}><span aria-hidden="true">←</span>{t.back}</a>
   <section class="product-hero" style={`--app-accent: ${app.accent}`}>
     <div class="product-hero-copy"><div class="product-meta"><span>{t[app.category]} · {app.platform} · {app.requirement}</span></div><img class="app-icon" src={withBase(app.icon)} alt="" width="88" height="88" /><h1>{translation.name}</h1><p class="product-tagline">{translation.tagline}</p><p class="product-description">{translation.description}</p><AppAction app={app} locale={locale} /><div class="product-legal-links"><a href={pageUrl(locale, app.slug, 'privacy')}>{t.privacy}</a><span aria-hidden="true">·</span><a href={pageUrl(locale, app.slug, 'support')}>{t.support}</a></div></div>

@@ -27,7 +27,7 @@ const visibleApps = apps.filter((app) => app.status !== 'archived');
   <div class="app-collection">
     {visibleApps.map((app, index) => {
       const translation = app.locales[locale];
-      return <article class="featured-app" style={`--app-accent: ${app.accent}`}>
+      return <article class="featured-app" data-app={app.slug} style={`--app-accent: ${app.accent}`}>
         <div class="featured-copy">
           <div class="product-meta"><span>{String(index + 1).padStart(2, '0')} / {t[app.category]}</span><span>{app.platform} · {app.requirement}</span></div>
           <img class="app-icon" src={withBase(app.icon)} alt={`${translation.name} ${locale === 'en' ? 'app icon' : '图标'}`} width="80" height="80" />
