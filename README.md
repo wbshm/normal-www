@@ -80,4 +80,4 @@ App Store Connect 填英文政策与支持 URL；Marketing URL 可填英文介�
 
 打卡鸭的介绍、权限边界、隐私政策和支持内容来自 [CheckInDuck-WWW](https://github.com/wbshm/CheckInDuck-WWW)，迁入版本为 `0b89b0ae808b589e06b322c8832ea4f3ec448a3d`。使用源仓库 `appstore.png` 图标和六张 `screen/img_*.png` 实际截图，截图压缩为 WebP，保留英文界面。隐私政策沿用原生效日期 `2026-03-29`，新增对应中文版本。iOS 16 最低版本依据本机 CheckInDuck App 工程的部署设置确认。
 
-源网站没有公开下载按钮或商店地址，打卡鸭暂设为 `coming-soon`。确认商店页可公开访问后，填写 `appStoreUrl` 并设为 `available`。原仓库和旧站地址未修改；新地址实际部署后，再更新 App Store Connect 或 App 内的官网、隐私与支持入口。迁入详情见 [打卡鸭迁入记录](docs/CHECKINDUCK-MIGRATION.md)。
+打卡鸭已在 App Store 上线，2026-10-12 核实中国及美国商店均可查询，下载地址为 [CheckInDuck / 打卡鸭](https://apps.apple.com/app/id6760517368)，状态为 `available`。中英首页和介绍页均提供下载按钮。原仓库和旧站地址未修改；App Store Connect 或 App 内的官网、隐私与支持入口可使用本仓库对应地址。迁入详情见 [打卡鸭迁入记录](docs/CHECKINDUCK-MIGRATION.md)。

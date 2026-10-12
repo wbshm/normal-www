@@ -33,7 +33,8 @@
   {
     "slug": "checkinduck",
     "category": "tool",
-    "status": "coming-soon",
+    "status": "available",
+    "appStoreUrl": "https://apps.apple.com/app/id6760517368",
     "icon": "/images/checkinduck/icon.png",
     "screenshots": [
       {

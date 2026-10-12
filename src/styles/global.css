@@ -357,6 +357,12 @@ p {
   color: #fff;
 }
 
+.featured-copy > .button + .button {
+  display: flex;
+  width: fit-content;
+  margin-top: 10px;
+}
+
 .primary:hover {
   color: #fff;
   background: #246053;

@@ -13,7 +13,7 @@
 
 在现有 Astro 网站中新增永久标识 `checkinduck`，中文名「打卡鸭」，英文名「CheckInDuck」。新增首页卡片、中英介绍、中英隐私和中英支持。文案面向普通用户，不迁入原站的审核说明。Premium 保留源站确认的功能，不另行声明价格、购买期限或免费任务额度。
 
-最低系统版本 iOS 16 来自本机 `CheckInDuck.xcodeproj/project.pbxproj` 的主 App 部署设置。源网站未提供 App Store 地址，发布状态暂为 `coming-soon`；不使用其他 App 的链接作为占位。
+最低系统版本 iOS 16 来自本机 `CheckInDuck.xcodeproj/project.pbxproj` 的主 App 部署设置。迁入时源网站未提供 App Store 地址，因此最初使用 `coming-soon` 状态。
 
 ## 地址
 
@@ -36,4 +36,8 @@
 - 浏览器实际点击英文隐私页 → 中文隐私页 → 中文支持页，导航通过。打卡鸭的桌面卡片与窄屏英文首屏已目视检查；窄屏标题字号适配较长的英文名。
 - 七份原始图片均与源仓库 Git blob 校验一致。图标缩至 512px，截图缩至 780px 宽并转换为 WebP，总资源体积约 564KB；无内容修改。
 
-尚未推送或部署。公开地址需在发布后再做 HTTP 验证。
+## App Store 上线更新
+
+2026-10-12，通过 Apple 官方查询接口核实中国和美国商店均已上线：应用 ID `6760517368`，Bundle ID `com.wang.CheckInDuck`，最低 iOS 版本 16.0。
+
+下载链接设为 `https://apps.apple.com/app/id6760517368`，不固定商店地区，由 App Store 处理地区选择。状态改为 `available`，中英首页与介绍页显示正式下载按钮。
