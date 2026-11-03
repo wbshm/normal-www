@@ -1,6 +1,8 @@
 ---
 import type { Locale } from '../data/site';
 import { site } from '../data/site';
+import { policyApps, policyLocales } from '../data/policies';
+import { languageInfo } from '../data/site';
 import { apps } from '../lib/apps';
 import { copy } from '../lib/i18n';
 import { pageUrl, withBase } from '../lib/urls';
@@ -48,6 +50,11 @@ const visibleApps = apps.filter((app) => app.status !== 'archived');
       </article>;
     })}
   </div>
+</section>
+<section id="privacy-policies" class="policy-section container" aria-labelledby="policy-heading">
+  <h2 id="policy-heading">{t.policyTitle}</h2>
+  <p>{t.policyBody}</p>
+  <div class="policy-list">{policyApps.map((app) => <article class="policy-card"><h3><a href={pageUrl(locale, app.slug, 'privacy')}>{app.names[locale]}</a></h3><div class="policy-languages">{policyLocales(app).map((language) => <a href={pageUrl(language, app.slug, 'privacy')} lang={languageInfo[language].tag} hreflang={languageInfo[language].tag}>{languageInfo[language].label}</a>)}</div></article>)}</div>
 </section>
 <section id="contact" class="contact-section container">
   <div class="contact-panel"><div><p class="eyebrow">{t.contactEyebrow}</p><h2>{t.contactTitle.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</h2></div><div class="contact-details"><p>{t.contactBody}</p><a href={`mailto:${site.email}?subject=Hello%20Normal%20Apps`}>{site.email}<Arrow diagonal /></a></div></div>

@@ -1,12 +1,13 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { contentLocales } from './data/site';
 
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/apps' }),
   schema: z.object({
     app: z.string(),
-    locale: z.enum(['en', 'zh']),
+    locale: z.enum(contentLocales),
     kind: z.enum(['overview', 'privacy', 'support']),
     title: z.string().min(1),
     description: z.string().min(1),

@@ -1,6 +1,6 @@
 # Normal Apps
 
-独立开发者的中英双语产品官网。收录 Anglepop 和打卡鸭（CheckInDuck），每款 App 提供介绍、独立隐私政策和用户支持页面。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
+独立开发者的中英双语产品官网。收录 Anglepop 和打卡鸭（CheckInDuck），每款 App 提供介绍、独立隐私政策和用户支持页面；另提供牌感（TileSense）的简体中文、英文、日文隐私政策。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
 
 ## 本地开发
 
@@ -20,7 +20,7 @@ npm run verify
 npm run preview
 ```
 
-`verify` 检查静态页面、站内链接与资源、目录锚点、部署前缀、双语 alternate、canonical、政策日期、联系方式和 sitemap。页面不允许含客户端脚本或占位内容。
+`verify` 检查静态页面、站内链接与资源、目录锚点、部署前缀、语言 alternate、canonical、政策日期、联系方式和 sitemap，并检查牌感三语政策的章节、语言切换和首页入口。页面不允许含客户端脚本或占位内容。
 
 ## 发布地址
 
@@ -33,6 +33,14 @@ npm run preview
 | 打卡鸭 | https://wbshm.github.io/normal-www/apps/checkinduck/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/ |
 | 打卡鸭隐私政策 | https://wbshm.github.io/normal-www/apps/checkinduck/privacy/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/privacy/ |
 | 打卡鸭用户支持 | https://wbshm.github.io/normal-www/apps/checkinduck/support/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/support/ |
+
+牌感隐私政策的发布路径：
+
+| 语言 | 地址 |
+|---|---|
+| 简体中文 | https://wbshm.github.io/normal-www/zh/apps/tilesense/privacy/ |
+| English | https://wbshm.github.io/normal-www/apps/tilesense/privacy/ |
+| 日本語 | https://wbshm.github.io/normal-www/ja/apps/tilesense/privacy/ |
 
 GitHub 仓库中选择 **Settings → Pages → Source → GitHub Actions**。提交到 `main` 后，工作流执行类型检查、构建、静态验证，再发布到 Pages。PR 只检查、不发布，也可在 Actions 中手动运行。
 
@@ -58,6 +66,17 @@ SITE_ORIGIN=https://wbshm.github.io npm run verify
 4. 执行 `npm run check && npm run build && npm run verify`，确认文案、真实数据处理情况和图片，再提交。
 
 页面与 sitemap 自动生成，无需改模板。`screenshots` 可为空，此时省略截图区、首页使用图标。每款 App 的截图语言说明由配置提供。
+
+## 单独接入隐私政策
+
+牌感当前仅接入隐私政策，没有登记图标、最低 iOS 版本、商店地址或产品介绍页。中英首页提供政策入口，三个政策页面可互相切换语言；日文政策的站点导航返回英文首页，不生成日文首页或现有产品的日文页面。
+
+- 在 `src/data/policies.ts` 的 `policyApps` 中登记永久 `slug` 和各语言的 `names`。
+- 正文位于 `src/content/apps/tilesense/{en,zh,ja}/privacy.md`。使用与其他 App 政策相同的 frontmatter，`kind` 为 `privacy`，三语 `updated` 保持一致。
+- 修改正文时同步核对三种语言、公开署名和邮箱，并运行类型检查、构建和静态验证。新增独立政策或语言时，同步扩展 `scripts/verify-site.mjs` 中的路由验证。
+- 日后补充完整产品资料时保留现有政策 URL，避免 App 内或 App Store Connect 中的链接失效。
+
+牌感政策依据开发者提供的数据处理事实撰写：无需账号、学习进度及设置仅在本地保存、不收集或上传个人信息、无第三方统计/广告/崩溃收集 SDK、不追踪或共享 App 数据，支付仅由 Apple 处理的一次性应用内购买。开发者公开署名和联系方式沿用本网站的 **Normal Apps** 与 **wrq142857@gmail.com**；三语生效日期均为 **2026-11-03**。政策 Markdown 已从原草稿目录移入站点内容目录，后续以该目录为准。
 
 ## 上线、改名与停止下载
 

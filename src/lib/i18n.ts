@@ -16,6 +16,7 @@ export const copy = {
     more: 'A little help, when you need it.', moreBody: 'Read how your data is handled, or find answers and get in touch.',
     notFound: 'This page took a different turn.', notFoundBody: 'The address may be incomplete. Let’s get you back to our apps.',
     home: 'Back to home', rights: 'Normal Apps',
+    policyTitle: 'App privacy policies', policyBody: 'Read how these apps handle your data.',
   },
   zh: {
     apps: '我们的 App', contact: '联系开发者', switch: 'EN', skip: '跳转到内容',
@@ -34,5 +35,13 @@ export const copy = {
     more: '需要帮助时，有迹可循。', moreBody: '了解数据如何处理，或者查找常见问题、联系开发者。',
     notFound: '这个页面，拐了个弯。', notFoundBody: '地址可能不完整。先回到首页看看我们的 App 吧。',
     home: '返回首页', rights: 'Normal Apps',
+    policyTitle: 'App 隐私政策', policyBody: '了解这些 App 如何处理你的数据。',
+  },
+  ja: {
+    apps: 'アプリ一覧', contact: 'お問い合わせ', skip: '本文へ移動',
+    footer: '小さなアプリを、丁寧に。', rights: 'Normal Apps',
+    back: 'アプリ一覧', contents: '目次', effective: '施行日',
+    privacyEyebrow: 'データの取り扱いについて', supportEyebrow: 'サポート',
+    about: 'アプリについて', privacy: 'プライバシーポリシー', support: 'サポート',
   },
 } as const;
