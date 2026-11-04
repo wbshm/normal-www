@@ -8,7 +8,7 @@ description: 玩法、本机进度、每日挑战、购买恢复，以及真实�
 
 ## 联系我们
 
-遇到问题、发现 Bug，或者有想分享的建议？请发邮件至 **[wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20support)**。Anglepop 由独立开发者 Normal Apps 制作。
+遇到问题、发现 Bug，或者有想分享的建议？请发邮件至 **[wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20support)**。Anglepop 由独立开发者啵啵的猫粮计划制作。
 
 如果是技术问题，请说明 iPhone 型号、iOS 版本、Anglepop 版本和具体情况。相关关卡编号与截图也有助于排查。中文和英文反馈都可以。
 

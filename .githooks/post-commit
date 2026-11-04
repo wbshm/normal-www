@@ -1,0 +1,8 @@
+#!/bin/sh
+# A post-commit failure cannot undo a successful commit.
+[ "${SKIP_DEPLOY:-0}" = 1 ] && exit 0
+root=$(git rev-parse --show-toplevel) || exit 0
+if ! /bin/bash "$root/scripts/deploy.sh" --hook; then
+  printf '\n[deploy] 提交已保存，但自动发布失败。修复后运行 npm run deploy 重试。\n' >&2
+fi
+exit 0

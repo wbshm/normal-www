@@ -1,0 +1,12 @@
+# Managed by normal-www/scripts/setup-local.sh
+Host normal-www wangrq.cn
+    HostName wangrq.cn
+    User wangrq
+    Port 22
+    IdentityFile ~/.ssh/id_rsa
+    IdentitiesOnly yes
+    BatchMode yes
+    StrictHostKeyChecking yes
+    ConnectTimeout 15
+    ServerAliveInterval 30
+    ServerAliveCountMax 3

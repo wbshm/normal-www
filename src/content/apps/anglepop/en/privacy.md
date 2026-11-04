@@ -4,12 +4,12 @@ locale: en
 kind: privacy
 title: Anglepop Privacy Policy
 description: How Anglepop handles local game data, Apple purchases, and information you choose to send for support.
-updated: "2026-10-01"
+updated: "2026-11-04"
 ---
 
 ## About this policy
 
-This policy applies to the Anglepop iPhone app provided by **Normal Apps**, an independent developer. It explains the app's current data practices and how we handle information you choose to send for support.
+This policy applies to the Anglepop iPhone app provided by **啵啵的猫粮计划**, an independent developer. It explains the app's current data practices and how we handle information you choose to send for support.
 
 For privacy questions or requests, contact **[wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20privacy)**.
 
@@ -34,7 +34,7 @@ The current version of Anglepop does not include advertising networks or third-p
 
 Optional in-app purchases and purchase restoration use Apple's StoreKit and App Store services. Anglepop reads verified purchase entitlements on your device to determine whether a paid feature is unlocked. These services may require a network connection.
 
-Apple processes payments. Normal Apps does not receive your payment-card details. Apple's purchase records, payment processing, and related data are governed by [Apple's Privacy Policy](https://www.apple.com/legal/privacy/). Deleting Anglepop does not delete purchase records held by Apple.
+Apple processes payments. 啵啵的猫粮计划 does not receive your payment-card details. Apple's purchase records, payment processing, and related data are governed by [Apple's Privacy Policy](https://www.apple.com/legal/privacy/). Deleting Anglepop does not delete purchase records held by Apple.
 
 ## Information you send for support
 
@@ -46,7 +46,7 @@ Support email is handled through Gmail, Google's email service, subject to [Goog
 
 Local progress and settings remain in the app's storage until removed by you or the operating system. You can remove the app's on-device data by deleting the app, rather than offloading it. Backup copies are controlled by your backup settings; deleting the app does not necessarily delete earlier backups. Session-only failed routes are discarded when the app session ends.
 
-Normal Apps cannot access, recover, or remotely delete your local game progress. For support correspondence held by us, you may request access, correction, or deletion through the contact address above, subject to applicable requirements. Apple manages its own purchase records and privacy requests.
+啵啵的猫粮计划 cannot access, recover, or remotely delete your local game progress. For support correspondence held by us, you may request access, correction, or deletion through the contact address above, subject to applicable requirements. Apple manages its own purchase records and privacy requests.
 
 ## Children
 
@@ -54,11 +54,11 @@ Anglepop does not ask players to submit personal information inside the app. We 
 
 ## Visiting this website
 
-This website is hosted on GitHub Pages. We have not added analytics, advertising scripts, or a contact form. GitHub may process technical request information, including visitors' IP addresses, for hosting and security under [GitHub's Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement). Website hosting data is separate from Anglepop's local game data.
+The main site at [wangrq.cn](https://wangrq.cn/) is served from a server managed by the developer. A copy remains available on [GitHub Pages](https://wbshm.github.io/normal-www/). We have not added analytics, advertising scripts, or a contact form. Website servers process technical request information, including visitors' IP addresses, to deliver pages and maintain security. When you visit the GitHub Pages site, GitHub's handling of this information is governed by [GitHub's Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement). Website hosting data is separate from Anglepop's local game data.
 
 ## Changes and contact
 
 We will update this page when our data practices change and show the revised effective date. The English and Chinese versions describe the same practices.
 
-**Developer:** Normal Apps  
+**Developer:** 啵啵的猫粮计划\
 **Email:** [wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20privacy)

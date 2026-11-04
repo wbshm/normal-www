@@ -1,3 +1,5 @@
+import { site } from '../data/site';
+
 export const copy = {
   en: {
     apps: 'Our apps', contact: 'Say hello', switch: '中文', skip: 'Skip to content',
@@ -11,11 +13,11 @@ export const copy = {
     contactBody: 'Behind these apps is an independent developer. If something isn’t working, or you have a thought to share, get in touch.',
     footer: 'Small apps. Made with care.', back: 'All apps', about: 'About the app',
     screenshots: 'A closer look', screenshotNote: 'Actual in-app screenshots.',
-    contents: 'On this page', effective: 'Effective date', independent: 'By Normal Apps · Independent developer',
+    contents: 'On this page', effective: 'Effective date', independent: `By ${site.developer} · Independent developer`,
     privacyEyebrow: 'YOUR DATA, EXPLAINED', supportEyebrow: 'HERE TO HELP',
     more: 'A little help, when you need it.', moreBody: 'Read how your data is handled, or find answers and get in touch.',
     notFound: 'This page took a different turn.', notFoundBody: 'The address may be incomplete. Let’s get you back to our apps.',
-    home: 'Back to home', rights: 'Normal Apps',
+    home: 'Back to home', rights: site.developer,
     policyTitle: 'App privacy policies', policyBody: 'Read how these apps handle your data.',
   },
   zh: {
@@ -30,16 +32,16 @@ export const copy = {
     contactBody: '这些 App 由独立开发者制作。遇到了问题，或者有想分享的建议，都可以直接联系我们。',
     footer: '小小的 App，认真地做。', back: '全部 App', about: '关于这款 App',
     screenshots: '近一点看看', screenshotNote: '实际 App 截图。',
-    contents: '本页目录', effective: '生效日期', independent: 'Normal Apps 制作 · 独立开发者',
+    contents: '本页目录', effective: '生效日期', independent: `${site.developer} 制作 · 独立开发者`,
     privacyEyebrow: '你的数据，清楚说明', supportEyebrow: '需要时，我们在这里',
     more: '需要帮助时，有迹可循。', moreBody: '了解数据如何处理，或者查找常见问题、联系开发者。',
     notFound: '这个页面，拐了个弯。', notFoundBody: '地址可能不完整。先回到首页看看我们的 App 吧。',
-    home: '返回首页', rights: 'Normal Apps',
+    home: '返回首页', rights: site.developer,
     policyTitle: 'App 隐私政策', policyBody: '了解这些 App 如何处理你的数据。',
   },
   ja: {
     apps: 'アプリ一覧', contact: 'お問い合わせ', skip: '本文へ移動',
-    footer: '小さなアプリを、丁寧に。', rights: 'Normal Apps',
+    footer: '小さなアプリを、丁寧に。', rights: site.developer,
     back: 'アプリ一覧', contents: '目次', effective: '施行日',
     privacyEyebrow: 'データの取り扱いについて', supportEyebrow: 'サポート',
     about: 'アプリについて', privacy: 'プライバシーポリシー', support: 'サポート',

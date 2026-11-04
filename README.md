@@ -1,4 +1,4 @@
-# Normal Apps
+# 啵啵的猫粮计划
 
 独立开发者的中英双语产品官网。收录 Anglepop 和打卡鸭（CheckInDuck），每款 App 提供介绍、独立隐私政策和用户支持页面；另提供牌感（TileSense）的简体中文、英文、日文隐私政策。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
 
@@ -26,31 +26,34 @@ npm run preview
 
 | 页面 | 英文 | 中文 |
 |---|---|---|
-| 首页 | https://wbshm.github.io/normal-www/ | https://wbshm.github.io/normal-www/zh/ |
-| Anglepop | https://wbshm.github.io/normal-www/apps/anglepop/ | https://wbshm.github.io/normal-www/zh/apps/anglepop/ |
-| 隐私政策 | https://wbshm.github.io/normal-www/apps/anglepop/privacy/ | https://wbshm.github.io/normal-www/zh/apps/anglepop/privacy/ |
-| 用户支持 | https://wbshm.github.io/normal-www/apps/anglepop/support/ | https://wbshm.github.io/normal-www/zh/apps/anglepop/support/ |
-| 打卡鸭 | https://wbshm.github.io/normal-www/apps/checkinduck/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/ |
-| 打卡鸭隐私政策 | https://wbshm.github.io/normal-www/apps/checkinduck/privacy/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/privacy/ |
-| 打卡鸭用户支持 | https://wbshm.github.io/normal-www/apps/checkinduck/support/ | https://wbshm.github.io/normal-www/zh/apps/checkinduck/support/ |
+| 首页 | https://wangrq.cn/ | https://wangrq.cn/zh/ |
+| Anglepop | https://wangrq.cn/apps/anglepop/ | https://wangrq.cn/zh/apps/anglepop/ |
+| 隐私政策 | https://wangrq.cn/apps/anglepop/privacy/ | https://wangrq.cn/zh/apps/anglepop/privacy/ |
+| 用户支持 | https://wangrq.cn/apps/anglepop/support/ | https://wangrq.cn/zh/apps/anglepop/support/ |
+| 打卡鸭 | https://wangrq.cn/apps/checkinduck/ | https://wangrq.cn/zh/apps/checkinduck/ |
+| 打卡鸭隐私政策 | https://wangrq.cn/apps/checkinduck/privacy/ | https://wangrq.cn/zh/apps/checkinduck/privacy/ |
+| 打卡鸭用户支持 | https://wangrq.cn/apps/checkinduck/support/ | https://wangrq.cn/zh/apps/checkinduck/support/ |
 
 牌感隐私政策的发布路径：
 
 | 语言 | 地址 |
 |---|---|
-| 简体中文 | https://wbshm.github.io/normal-www/zh/apps/tilesense/privacy/ |
-| English | https://wbshm.github.io/normal-www/apps/tilesense/privacy/ |
-| 日本語 | https://wbshm.github.io/normal-www/ja/apps/tilesense/privacy/ |
+| 简体中文 | https://wangrq.cn/zh/apps/tilesense/privacy/ |
+| English | https://wangrq.cn/apps/tilesense/privacy/ |
+| 日本語 | https://wangrq.cn/ja/apps/tilesense/privacy/ |
 
-GitHub 仓库中选择 **Settings → Pages → Source → GitHub Actions**。提交到 `main` 后，工作流执行类型检查、构建、静态验证，再发布到 Pages。PR 只检查、不发布，也可在 Actions 中手动运行。
+主站部署到 **https://wangrq.cn/**。本机已经安装 `post-commit` hook，`main` 分支每次提交成功后自动构建已提交版本并通过 SSH 发布。部署失败不会撤销提交，修复后执行 `npm run deploy` 重试。SSH、服务器初始化、证书续期与回滚说明见 [部署文档](docs/DEPLOYMENT.md)。
+
+同时保留原 GitHub Pages 地址 `https://wbshm.github.io/normal-www/`。GitHub 仓库中选择 **Settings → Pages → Source → GitHub Actions**。推送到 `main` 后，工作流执行类型检查、构建、静态验证，再发布到 Pages。PR 只检查、不发布，也可在 Actions 中手动运行。
 
 发布后执行 HTTP 验证：
 
 ```sh
-SITE_ORIGIN=https://wbshm.github.io npm run verify
+ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/ npm run build
+ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/ SITE_ORIGIN=https://wangrq.cn npm run verify
 ```
 
-`astro.config.mjs` 中的 `site` 和 `base` 是公开网址的来源。组件使用 `src/lib/urls.ts` 生成站内路径，避免丢失 `/normal-www/` 前缀。Markdown 中同一 App 内跳转用相对地址，例如支持页的 `../privacy/`。
+`astro.config.mjs` 默认构建 GitHub Pages 的 `/normal-www/` 前缀；服务器发布设置 `ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/`。组件使用 `src/lib/urls.ts` 生成站内路径，canonical、sitemap 和 robots 随目标同步切换。Markdown 中同一 App 内跳转用相对地址，例如支持页的 `../privacy/`。
 
 ## 新增一款 App
 
@@ -76,7 +79,7 @@ SITE_ORIGIN=https://wbshm.github.io npm run verify
 - 修改正文时同步核对三种语言、公开署名和邮箱，并运行类型检查、构建和静态验证。新增独立政策或语言时，同步扩展 `scripts/verify-site.mjs` 中的路由验证。
 - 日后补充完整产品资料时保留现有政策 URL，避免 App 内或 App Store Connect 中的链接失效。
 
-牌感政策依据开发者提供的数据处理事实撰写：无需账号、学习进度及设置仅在本地保存、不收集或上传个人信息、无第三方统计/广告/崩溃收集 SDK、不追踪或共享 App 数据，支付仅由 Apple 处理的一次性应用内购买。开发者公开署名和联系方式沿用本网站的 **Normal Apps** 与 **wrq142857@gmail.com**；三语生效日期均为 **2026-11-03**。政策 Markdown 已从原草稿目录移入站点内容目录，后续以该目录为准。
+牌感政策依据开发者提供的数据处理事实撰写：无需账号、学习进度及设置仅在本地保存、不收集或上传个人信息、无第三方统计/广告/崩溃收集 SDK、不追踪或共享 App 数据，支付仅由 Apple 处理的一次性应用内购买。开发者公开署名和联系方式沿用本网站的 **啵啵的猫粮计划** 与 **wrq142857@gmail.com**；三语生效日期均为 **2026-11-03**。政策 Markdown 已从原草稿目录移入站点内容目录，后续以该目录为准。
 
 ## 上线、改名与停止下载
 
@@ -91,7 +94,7 @@ App Store Connect 填英文政策与支持 URL；Marketing URL 可填英文介�
 
 官网按当前实现描述：本机进度、288 主线关、75 内置每日挑战轮转、每天主动免费领取 1 张提示卡、历史轨迹一次性内购。价格由 App Store 展示。官网未宣传尚未开放的提示卡购买、云同步或永久轨迹档案。
 
-公开署名 **Normal Apps**，邮箱 **wrq142857@gmail.com**，在 `src/data/site.ts` 维护。正文也包含邮箱，修改时同步更新 Markdown。后续增加 SDK、广告、在线功能或改变邮件处理方式时，应更新双语政策和生效日期。
+公开署名 **啵啵的猫粮计划**，邮箱 **wrq142857@gmail.com**，在 `src/data/site.ts` 维护。正文也包含邮箱，修改时同步更新 Markdown。后续增加 SDK、广告、在线功能或改变邮件处理方式时，应更新双语政策和生效日期。
 
 ## 素材来源
 

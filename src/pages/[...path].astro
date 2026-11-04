@@ -1,7 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { apps, type App } from '../lib/apps';
-import { locales, kinds, type ContentLocale } from '../data/site';
+import { site, locales, kinds, type ContentLocale } from '../data/site';
 import { policyApps, policyLocales, type PolicyApp } from '../data/policies';
 import { copy } from '../lib/i18n';
 import { pagePath } from '../lib/urls';
@@ -55,7 +55,7 @@ const homeLocale = locale === 'ja' ? 'en' : locale;
 const rendered = entry ? await render(entry) : undefined;
 const Content = rendered?.Content;
 const t = copy[homeLocale];
-const title = entry ? `${entry.data.title} | Normal Apps` : locale === 'en' ? 'Normal Apps — Small apps. A little joy.' : 'Normal Apps — 小小的 App，一点点快乐。';
+const title = entry ? `${entry.data.title} | ${site.name}` : `${site.name} — ${t.hero}${locale === 'en' ? ' ' : ''}${t.heroAccent}`;
 const description = entry?.data.description ?? t.intro;
 ---
 <Layout locale={locale} title={title} description={description} slug={app?.slug ?? policyApp?.slug} kind={entry?.data.kind} image={app?.icon} availableLocales={policyApp ? policyLocales(policyApp) : locales}>

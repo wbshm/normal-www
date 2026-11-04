@@ -9,7 +9,9 @@
     "check": "astro check",
     "build": "astro build",
     "preview": "astro preview",
-    "verify": "node scripts/verify-site.mjs"
+    "verify": "node scripts/verify-site.mjs",
+    "deploy": "bash scripts/deploy.sh",
+    "deploy:setup": "bash scripts/setup-local.sh"
   },
   "dependencies": { "astro": "7.3.5" },
   "devDependencies": { "@astrojs/check": "0.9.10", "typescript": "~6.0.3" }

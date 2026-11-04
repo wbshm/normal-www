@@ -1,8 +1,8 @@
 export const site = {
-  name: 'Normal Apps',
-  developer: 'Normal Apps',
+  name: '啵啵的猫粮计划',
+  developer: '啵啵的猫粮计划',
   email: 'wrq142857@gmail.com',
-  url: 'https://wbshm.github.io',
+  url: import.meta.env.SITE,
 } as const;
 
 export const locales = ['en', 'zh'] as const;

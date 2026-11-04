@@ -1,15 +1,17 @@
 import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
+import config from '../astro.config.mjs';
 
 const root = new URL('../dist/', import.meta.url);
-const config = await readFile(new URL('../astro.config.mjs', import.meta.url), 'utf8');
-const base = config.match(/base:\s*['"]([^'"]+)['"]/)?.[1]?.replace(/\/$/, '');
-const origin = config.match(/site:\s*['"]([^'"]+)['"]/)?.[1];
+const base = config.base?.replace(/\/$/, '');
+const origin = config.site;
 const siteConfig = await readFile(new URL('../src/data/site.ts', import.meta.url), 'utf8');
+const siteName = siteConfig.match(/name:\s*['"]([^'"]+)['"]/)?.[1];
 const publicEmail = siteConfig.match(/email:\s*['"]([^'"]+)['"]/)?.[1];
-assert(base && origin, 'Verification requires explicit site and base configuration.');
+assert(typeof base === 'string' && origin, 'Verification requires explicit site and base configuration.');
 assert(publicEmail, 'Verification requires the public support email.');
+assert(siteName, 'Verification requires the public site name.');
 const files = await readdir(root, { recursive: true });
 const htmlFiles = files.filter((file) => file.endsWith('.html'));
 const sitemap = await readFile(new URL('sitemap.xml', root), 'utf8');
@@ -107,7 +109,7 @@ if (process.env.SITE_ORIGIN) {
     assert(response.ok, `${url.href}: HTTP ${response.status}`);
     const content = await response.text();
     if (!path.endsWith('.xml') && !path.endsWith('.txt')) {
-      assert(content.includes('Normal Apps'), `${url.href}: unexpected deployment content.`);
+      assert(content.includes(siteName), `${url.href}: unexpected deployment content.`);
       assert(!/<script(?:\s|>)/i.test(content), `${url.href}: unexpected script in published page.`);
     }
     console.log(`HTTP ${response.status} ${url.href}`);

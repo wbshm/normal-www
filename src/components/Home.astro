@@ -57,5 +57,5 @@ const visibleApps = apps.filter((app) => app.status !== 'archived');
   <div class="policy-list">{policyApps.map((app) => <article class="policy-card"><h3><a href={pageUrl(locale, app.slug, 'privacy')}>{app.names[locale]}</a></h3><div class="policy-languages">{policyLocales(app).map((language) => <a href={pageUrl(language, app.slug, 'privacy')} lang={languageInfo[language].tag} hreflang={languageInfo[language].tag}>{languageInfo[language].label}</a>)}</div></article>)}</div>
 </section>
 <section id="contact" class="contact-section container">
-  <div class="contact-panel"><div><p class="eyebrow">{t.contactEyebrow}</p><h2>{t.contactTitle.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</h2></div><div class="contact-details"><p>{t.contactBody}</p><a href={`mailto:${site.email}?subject=Hello%20Normal%20Apps`}>{site.email}<Arrow diagonal /></a></div></div>
+  <div class="contact-panel"><div><p class="eyebrow">{t.contactEyebrow}</p><h2>{t.contactTitle.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</h2></div><div class="contact-details"><p>{t.contactBody}</p><a href={`mailto:${site.email}?subject=${encodeURIComponent(`Hello ${site.name}`)}`}>{site.email}<Arrow diagonal /></a></div></div>
 </section>

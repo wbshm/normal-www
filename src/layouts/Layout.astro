@@ -18,7 +18,7 @@ const t = copy[locale];
 const homeLocale = locale === 'ja' ? 'en' : locale;
 const canonical = new URL(pageUrl(locale, slug, kind), site.url).href;
 const imageUrl = new URL(withBase(image), site.url).href;
-const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug} support` : 'Hello Normal Apps')}`;
+const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug} support` : `Hello ${site.name}`)}`;
 ---
 <!doctype html>
 <html lang={languageInfo[locale].tag}>
@@ -52,9 +52,9 @@ const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug}
   <body>
     <a class="skip-link" href="#main">{t.skip}</a>
     <header class="site-header container">
-      <a class="brand" href={pageUrl(homeLocale)} aria-label="Normal Apps">
+      <a class="brand" href={pageUrl(homeLocale)} aria-label={site.name}>
         <img src={withBase('/favicon.svg')} alt="" width="35" height="35" />
-        <span>Normal Apps<span class="brand-dot">.</span></span>
+        <span>{site.name}</span>
       </a>
       <nav class:list={['main-nav', { 'multilingual-nav': availableLocales.length > 2 }]} aria-label={locale === 'en' ? 'Main navigation' : locale === 'ja' ? 'メインナビゲーション' : '主导航'}>
         <a href={`${pageUrl(homeLocale)}#apps`}>{t.apps}</a>
@@ -64,7 +64,7 @@ const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug}
     </header>
     <main id="main"><slot /></main>
     <footer class="site-footer container">
-      <div><a class="footer-brand" href={pageUrl(homeLocale)}>Normal Apps.</a><p>{t.footer}</p></div>
+      <div><a class="footer-brand" href={pageUrl(homeLocale)}>{site.name}</a><p>{t.footer}</p></div>
       <div class="footer-end"><a href={email}>{site.email}</a><span>© {new Date().getUTCFullYear()} {t.rights}</span></div>
     </footer>
   </body>

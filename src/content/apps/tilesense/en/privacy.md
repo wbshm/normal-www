@@ -11,7 +11,7 @@ updated: "2026-11-03"
 
 **Effective date: November 3, 2026**
 
-This policy applies to TileSense (Chinese and Japanese name: 牌感), an iOS app provided by independent developer Normal Apps ("we" or "us"). It applies to users worldwide, including mainland China, Japan, the United States, and the European Union.
+This policy applies to TileSense (Chinese and Japanese name: 牌感), an iOS app provided by independent developer 啵啵的猫粮计划 ("we" or "us"). It applies to users worldwide, including mainland China, Japan, the United States, and the European Union.
 
 TileSense is an educational app for learning mahjong rules and tile efficiency through lessons and exercises. It has no gambling, chips, matches, or social features.
 
@@ -57,5 +57,5 @@ If we introduce data collection in the future, we will update this policy and no
 
 If you have any questions about this policy, please contact:
 
-- Developer: Normal Apps
+- Developer: 啵啵的猫粮计划
 - Email: [wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=TileSense%20privacy)

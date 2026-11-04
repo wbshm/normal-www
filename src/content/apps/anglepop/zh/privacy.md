@@ -4,12 +4,12 @@ locale: zh
 kind: privacy
 title: Anglepop 隐私政策
 description: Anglepop 如何处理本机游戏数据、Apple 购买服务，以及你主动发送的支持信息。
-updated: "2026-10-01"
+updated: "2026-11-04"
 ---
 
 ## 关于本政策
 
-本政策适用于独立开发者 **Normal Apps** 提供的 Anglepop iPhone App，说明当前版本的数据处理方式，以及我们如何处理你主动发送的支持信息。
+本政策适用于独立开发者 **啵啵的猫粮计划** 提供的 Anglepop iPhone App，说明当前版本的数据处理方式，以及我们如何处理你主动发送的支持信息。
 
 隐私问题或相关请求，请联系 **[wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20privacy)**。
 
@@ -34,7 +34,7 @@ Anglepop 不会将这些游戏数据发送至开发者运营的服务器，也�
 
 可选内购及恢复购买使用 Apple 的 StoreKit 和 App Store 服务。Anglepop 在设备上读取已核验的购买资格，判断付费功能是否解锁；这些服务可能需要联网。
 
-付款由 Apple 处理，Normal Apps 不会获得你的银行卡详细信息。Apple 的购买记录、支付处理及相关数据适用 [Apple 隐私政策](https://www.apple.com/legal/privacy/)。删除 Anglepop 不会删除 Apple 持有的购买记录。
+付款由 Apple 处理，啵啵的猫粮计划不会获得你的银行卡详细信息。Apple 的购买记录、支付处理及相关数据适用 [Apple 隐私政策](https://www.apple.com/legal/privacy/)。删除 Anglepop 不会删除 Apple 持有的购买记录。
 
 ## 你主动发送的支持信息
 
@@ -46,7 +46,7 @@ Anglepop 不会将这些游戏数据发送至开发者运营的服务器，也�
 
 本机进度和设置保存在 App 存储中，直到你或操作系统移除。通过删除 App（而非卸载保留数据的“卸载 App”操作），可以移除其本机数据。备份副本由你的备份设置管理，删除 App 不一定会删除此前的备份。本次启动期间的失败轨迹会在 App 会话结束时清除。
 
-Normal Apps 无法访问、恢复或远程删除你的本机游戏进度。对于我们持有的支持邮件，你可以通过上述邮箱提出访问、更正或删除请求，处理时遵循适用要求。Apple 自行管理其购买记录及隐私请求。
+啵啵的猫粮计划无法访问、恢复或远程删除你的本机游戏进度。对于我们持有的支持邮件，你可以通过上述邮箱提出访问、更正或删除请求，处理时遵循适用要求。Apple 自行管理其购买记录及隐私请求。
 
 ## 儿童
 
@@ -54,11 +54,11 @@ Anglepop 不要求玩家在 App 内提交个人信息，我们不会明知是儿
 
 ## 访问本网站
 
-本网站托管在 GitHub Pages，我们没有加入统计分析、广告脚本或联系表单。GitHub 可能依据 [GitHub 隐私声明](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)，为托管和安全处理访问者 IP 地址等技术请求信息。网站托管数据与 Anglepop 的本机游戏数据相互独立。
+本网站主站 [wangrq.cn](https://wangrq.cn/) 由开发者管理的服务器提供，同时保留 [GitHub Pages 站点](https://wbshm.github.io/normal-www/)。我们没有加入统计分析、广告脚本或联系表单。网站服务器为提供网页和维护安全，会处理访问者 IP 地址等技术请求信息。访问 GitHub Pages 站点时，GitHub 对相关信息的处理适用 [GitHub 隐私声明](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)。网站托管数据与 Anglepop 的本机游戏数据相互独立。
 
 ## 政策更新与联系
 
 数据处理方式变化时，我们会更新本页并展示新的生效日期。英文与中文版本说明相同的数据处理方式。
 
-**开发者：** Normal Apps  
+**开发者：** 啵啵的猫粮计划\
 **邮箱：** [wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20privacy)

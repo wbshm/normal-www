@@ -8,7 +8,7 @@ description: How to play, local progress, daily challenges, purchases, and a rea
 
 ## Get in touch
 
-Have a question, found a bug, or want to share an idea? Email **[wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20support)**. Anglepop is made by Normal Apps, an independent developer.
+Have a question, found a bug, or want to share an idea? Email **[wrq142857@gmail.com](mailto:wrq142857@gmail.com?subject=Anglepop%20support)**. Anglepop is made by 啵啵的猫粮计划, an independent developer.
 
 For a technical issue, include your iPhone model, iOS version, Anglepop version, and what happened. A level number and a screenshot can help when relevant. You can send feedback in English or Chinese.
 
