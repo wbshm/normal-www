@@ -1,6 +1,6 @@
 # 啵啵的猫粮计划
 
-独立开发者的中英双语产品官网。收录 Anglepop 和打卡鸭（CheckInDuck），每款 App 提供介绍、独立隐私政策和用户支持页面；另提供牌感（TileSense）的简体中文、英文、日文隐私政策。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
+独立开发者的中英双语产品官网。收录 Anglepop、打卡鸭（CheckInDuck）和牌感（TileSense），每款 App 提供介绍、独立隐私政策和用户支持页面；牌感另提供日文隐私政策。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
 
 ## 本地开发
 
@@ -20,7 +20,7 @@ npm run verify
 npm run preview
 ```
 
-`verify` 检查静态页面、站内链接与资源、目录锚点、部署前缀、语言 alternate、canonical、政策日期、联系方式和 sitemap，并检查牌感三语政策的章节、语言切换和首页入口。页面不允许含客户端脚本或占位内容。
+`verify` 检查静态页面、站内链接与资源、目录锚点、部署前缀、语言 alternate、canonical、政策日期、联系方式和 sitemap，并检查三个 App 的首页卡片、牌感介绍页及截图、三语政策的章节与语言切换。页面不允许含客户端脚本或占位内容。
 
 ## 发布地址
 
@@ -33,6 +33,9 @@ npm run preview
 | 打卡鸭 | https://wangrq.cn/apps/checkinduck/ | https://wangrq.cn/zh/apps/checkinduck/ |
 | 打卡鸭隐私政策 | https://wangrq.cn/apps/checkinduck/privacy/ | https://wangrq.cn/zh/apps/checkinduck/privacy/ |
 | 打卡鸭用户支持 | https://wangrq.cn/apps/checkinduck/support/ | https://wangrq.cn/zh/apps/checkinduck/support/ |
+| 牌感 | https://wangrq.cn/apps/tilesense/ | https://wangrq.cn/zh/apps/tilesense/ |
+| 牌感隐私政策 | https://wangrq.cn/apps/tilesense/privacy/ | https://wangrq.cn/zh/apps/tilesense/privacy/ |
+| 牌感用户支持 | https://wangrq.cn/apps/tilesense/support/ | https://wangrq.cn/zh/apps/tilesense/support/ |
 
 牌感隐私政策的发布路径：
 
@@ -70,14 +73,13 @@ ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/ SITE_ORIGIN=https://wangrq.cn npm run 
 
 页面与 sitemap 自动生成，无需改模板。`screenshots` 可为空，此时省略截图区、首页使用图标。每款 App 的截图语言说明由配置提供。
 
-## 单独接入隐私政策
+## 牌感与额外政策语言
 
-牌感当前仅接入隐私政策，没有登记图标、最低 iOS 版本、商店地址或产品介绍页。中英首页提供政策入口，三个政策页面可互相切换语言；日文政策的站点导航返回英文首页，不生成日文首页或现有产品的日文页面。
+牌感与另外两个 App 使用相同的首页卡片、介绍页和用户支持模板。产品资料、图标及截图来自本机 `/Users/wangrq/Documents/Project/Ma`，最低 iOS 17 依据 Xcode 工程确认。当前按 `coming-soon` 展示，没有配置未经核实的商店地址。
 
-- 在 `src/data/policies.ts` 的 `policyApps` 中登记永久 `slug` 和各语言的 `names`。
-- 正文位于 `src/content/apps/tilesense/{en,zh,ja}/privacy.md`。使用与其他 App 政策相同的 frontmatter，`kind` 为 `privacy`，三语 `updated` 保持一致。
-- 修改正文时同步核对三种语言、公开署名和邮箱，并运行类型检查、构建和静态验证。新增独立政策或语言时，同步扩展 `scripts/verify-site.mjs` 中的路由验证。
-- 日后补充完整产品资料时保留现有政策 URL，避免 App 内或 App Store Connect 中的链接失效。
+`src/data/policies.ts` 的 `policyApps` 登记政策翻译，可为完整产品补充额外语言，也可接入只有政策的 App。与产品重复的中英文政策只生成一次；首页仅为尚未接入完整产品的 App 单独显示政策卡片。
+
+牌感政策正文位于 `src/content/apps/tilesense/{en,zh,ja}/privacy.md`，原有三个 URL 保持不变，政策页面可互相切换语言。日文政策的产品介绍与支持导航指向英文页面，不生成日文首页、介绍页或支持页。修改正文时同步核对三种语言、公开署名、邮箱和 `updated` 日期，并运行类型检查、构建和静态验证。
 
 牌感政策依据开发者提供的数据处理事实撰写：无需账号、学习进度及设置仅在本地保存、不收集或上传个人信息、无第三方统计/广告/崩溃收集 SDK、不追踪或共享 App 数据，支付仅由 Apple 处理的一次性应用内购买。开发者公开署名和联系方式沿用本网站的 **啵啵的猫粮计划** 与 **wrq142857@gmail.com**；三语生效日期均为 **2026-11-03**。政策 Markdown 已从原草稿目录移入站点内容目录，后续以该目录为准。
 
@@ -99,6 +101,8 @@ App Store Connect 填英文政策与支持 URL；Marketing URL 可填英文介�
 ## 素材来源
 
 图标来自 Anglepop 现行 `AppIcon.png`；截图来自实际运行的首页、游戏中和选关界面。网站仅压缩截图为 WebP，未改 App 工程。使用系统字体，不加载远程字体、广告或分析脚本。
+
+牌感图标来自 `Ma/TileSense/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png`；五张截图来自 `Ma/docs/appstore/screenshots/raw/zh-Hans/`，按比例压缩为 WebP，展示课程路径、答题图解、入门讲解、手牌分析和练习。中英文介绍依据 `Ma/docs/appstore/metadata.json`，支持内容依据 `Ma/docs/appstore/site/support.html`，免费范围与购买方式同时核对 `TileSense/Store/Access.swift` 和 `PaywallView.swift`。未修改 Ma 工程或已有隐私政策正文。
 
 打卡鸭的介绍、权限边界、隐私政策和支持内容来自 [CheckInDuck-WWW](https://github.com/wbshm/CheckInDuck-WWW)，迁入版本为 `0b89b0ae808b589e06b322c8832ea4f3ec448a3d`。使用源仓库 `appstore.png` 图标和六张 `screen/img_*.png` 实际截图，截图压缩为 WebP，保留英文界面。隐私政策沿用原生效日期 `2026-03-29`，新增对应中文版本。iOS 16 最低版本依据本机 CheckInDuck App 工程的部署设置确认。
 

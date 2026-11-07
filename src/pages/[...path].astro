@@ -14,8 +14,7 @@ export async function getStaticPaths() {
   const entries = await getCollection('pages');
   const routes: { params: { path: string | undefined }; props: Props }[] = [];
   const usedEntries = new Set<string>();
-  const slugs = [...apps, ...policyApps].map((app) => app.slug);
-  if (new Set(slugs).size !== slugs.length) throw new Error('Product and policy app slugs must be unique.');
+  if (new Set(policyApps.map((app) => app.slug)).size !== policyApps.length) throw new Error('Policy app slugs must be unique.');
   function findEntry(slug: string, locale: ContentLocale, kind: CollectionEntry<'pages'>['data']['kind']) {
     const matching = entries.filter((entry) => entry.data.app === slug && entry.data.locale === locale && entry.data.kind === kind);
     if (matching.length !== 1) throw new Error(`Expected exactly one ${locale}/${slug}/${kind} Markdown document; found ${matching.length}.`);
@@ -29,14 +28,17 @@ export async function getStaticPaths() {
     for (const app of apps) {
       for (const kind of kinds) {
         const entry = findEntry(app.slug, locale, kind);
-        routes.push({ params: { path: pagePath(locale, app.slug, kind).replace(/^\/|\/$/g, '') }, props: { locale, app, entry } });
+        const policyApp = kind === 'privacy' ? policyApps.find((policy) => policy.slug === app.slug) : undefined;
+        routes.push({ params: { path: pagePath(locale, app.slug, kind).replace(/^\/|\/$/g, '') }, props: { locale, app, policyApp, entry } });
       }
     }
   }
   for (const policyApp of policyApps) {
+    const app = apps.find((product) => product.slug === policyApp.slug);
     for (const locale of policyLocales(policyApp)) {
+      if (app && locales.some((productLocale) => productLocale === locale)) continue;
       const entry = findEntry(policyApp.slug, locale, 'privacy');
-      routes.push({ params: { path: pagePath(locale, policyApp.slug, 'privacy').replace(/^\/|\/$/g, '') }, props: { locale, policyApp, entry } });
+      routes.push({ params: { path: pagePath(locale, policyApp.slug, 'privacy').replace(/^\/|\/$/g, '') }, props: { locale, app, policyApp, entry } });
     }
   }
   for (const entry of entries) {

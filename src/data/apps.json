@@ -95,5 +95,37 @@
         "screenshotNote": "来自打卡鸭原官网的实际 App 截图，展示英文界面。"
       }
     }
+  },
+  {
+    "slug": "tilesense",
+    "category": "tool",
+    "status": "coming-soon",
+    "icon": "/images/tilesense/icon.png",
+    "screenshots": [
+      { "src": "/images/tilesense/learn.webp", "en": "A learning path, one lesson at a time", "zh": "沿着课程路径，一点点学会" },
+      { "src": "/images/tilesense/why.webp", "en": "See why, with visual explanations", "zh": "答错也没关系，图解告诉你为什么" },
+      { "src": "/images/tilesense/guide.webp", "en": "Start with the basics", "zh": "从认牌开始，把基础弄明白" },
+      { "src": "/images/tilesense/analyze.webp", "en": "Compare your next discard", "zh": "输入手牌，比较每一种打法" },
+      { "src": "/images/tilesense/practice.webp", "en": "A little practice, every day", "zh": "每天几道题，慢慢练出牌感" }
+    ],
+    "platform": "iPhone",
+    "requirement": "iOS 17+",
+    "accent": "#dff2df",
+    "locales": {
+      "en": {
+        "name": "TileSense",
+        "tagline": "Better hands. One tile at a time.",
+        "description": "Learn mahjong step by step, from your first tiles to smarter discards. Short lessons, visual explanations and a hand analyzer help you understand each choice.",
+        "highlights": ["7 units, 34 lessons", "Daily practice & review", "Hand analyzer"],
+        "screenshotNote": "Actual in-app screenshots, shown in Simplified Chinese. TileSense also supports English and Japanese."
+      },
+      "zh": {
+        "name": "牌感",
+        "tagline": "每天几分钟，慢慢练出牌感。",
+        "description": "从认识麻将牌，到理解每一次取舍。用短课、图解和每日练习学会牌效，再用手牌分析器比较下一张该打什么。",
+        "highlights": ["7 个单元，34 节课", "每日练习与错题复习", "手牌分析器"],
+        "screenshotNote": "来自牌感 App 的实际截图，展示简体中文界面。牌感同时支持英文和日文。"
+      }
+    }
   }
 ]

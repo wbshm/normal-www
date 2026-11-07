@@ -63,7 +63,8 @@ for (const file of htmlFiles) {
 }
 
 const apps = JSON.parse(await readFile(new URL('../src/data/apps.json', import.meta.url), 'utf8'));
-assert.equal(htmlFiles.length, 3 + apps.length * 6 + policyRoutes.length, 'Expected two homepages, six pages per app, three TileSense policies, and a 404 page.');
+const additionalPolicies = policyRoutes.filter((route) => route.locale !== 'en' && route.locale !== 'zh-CN');
+assert.equal(htmlFiles.length, 3 + apps.length * 6 + additionalPolicies.length, 'Expected two homepages, six pages per app, an extra Japanese TileSense policy, and a 404 page.');
 for (const app of apps) {
   for (const prefix of ['', 'zh/']) {
     for (const kind of ['privacy', 'support']) {
@@ -98,7 +99,19 @@ assert.deepEqual([...policyDates], ['2026-11-03'], 'TileSense policies must shar
 for (const prefix of ['', 'zh/']) {
   const home = await readFile(new URL(`${prefix}index.html`, root), 'utf8');
   assert(home.includes(`href="${base}/${prefix}apps/tilesense/privacy/"`), `${prefix || 'en/'} homepage: TileSense policy entry missing.`);
+  const standaloneCards = [...home.matchAll(/<article class="policy-card">([\s\S]*?)<\/article>/g)];
+  assert(!standaloneCards.some((match) => match[1].includes('/apps/tilesense/')), `${prefix || 'en/'} homepage: TileSense must use the shared app card instead of a standalone policy card.`);
+  for (const app of apps.filter((app) => app.status !== 'archived')) {
+    assert.equal([...home.matchAll(/<article\b[^>]*\bdata-app="([^"]+)"/g)].filter((match) => match[1] === app.slug).length, 1, `${prefix || 'en/'} homepage: ${app.slug} needs exactly one shared app card.`);
+    assert(home.includes(`href="${base}/${prefix}apps/${app.slug}/"`), `${app.slug}: homepage product link missing.`);
+  }
+  const product = await readFile(new URL(`${prefix}apps/tilesense/index.html`, root), 'utf8');
+  assert(product.includes('class="product-hero"') && product.includes('class="product-story prose"'), 'TileSense must use the shared product introduction layout.');
+  assert.equal((product.match(/<figure>/g) ?? []).length, apps.find((app) => app.slug === 'tilesense').screenshots.length, 'TileSense must show its actual screenshots.');
+  assert(product.includes(`href="${base}/${prefix}apps/tilesense/support/"`), 'TileSense product page: support link missing.');
 }
+const japanesePolicy = await readFile(new URL('ja/apps/tilesense/privacy/index.html', root), 'utf8');
+assert(japanesePolicy.includes(`href="${base}/apps/tilesense/"`), 'Japanese policy must link back to the existing English product page.');
 
 if (process.env.SITE_ORIGIN) {
   const publicOrigin = new URL(process.env.SITE_ORIGIN);

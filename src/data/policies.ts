@@ -1,6 +1,6 @@
 import type { ContentLocale } from './site';
 
-// Apps with published privacy policies but no product or support pages yet.
+// Policy translations, including extra languages for apps with product pages.
 export const policyApps = [
   { slug: 'tilesense', names: { en: 'TileSense', zh: '牌感', ja: '牌感' } },
 ] as const satisfies readonly { slug: string; names: Partial<Record<ContentLocale, string>> }[];

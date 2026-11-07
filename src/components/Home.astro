@@ -12,6 +12,7 @@ interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = copy[locale];
 const visibleApps = apps.filter((app) => app.status !== 'archived');
+const standalonePolicyApps = policyApps.filter((policy) => !apps.some((app) => app.slug === policy.slug));
 ---
 <section class="home-hero container">
   <div class="eyebrow"><span class="tiny-dot" aria-hidden="true"></span>{t.eyebrow}</div>
@@ -51,11 +52,11 @@ const visibleApps = apps.filter((app) => app.status !== 'archived');
     })}
   </div>
 </section>
-<section id="privacy-policies" class="policy-section container" aria-labelledby="policy-heading">
+{standalonePolicyApps.length > 0 && <section id="privacy-policies" class="policy-section container" aria-labelledby="policy-heading">
   <h2 id="policy-heading">{t.policyTitle}</h2>
   <p>{t.policyBody}</p>
-  <div class="policy-list">{policyApps.map((app) => <article class="policy-card"><h3><a href={pageUrl(locale, app.slug, 'privacy')}>{app.names[locale]}</a></h3><div class="policy-languages">{policyLocales(app).map((language) => <a href={pageUrl(language, app.slug, 'privacy')} lang={languageInfo[language].tag} hreflang={languageInfo[language].tag}>{languageInfo[language].label}</a>)}</div></article>)}</div>
-</section>
+  <div class="policy-list">{standalonePolicyApps.map((app) => <article class="policy-card"><h3><a href={pageUrl(locale, app.slug, 'privacy')}>{app.names[locale]}</a></h3><div class="policy-languages">{policyLocales(app).map((language) => <a href={pageUrl(language, app.slug, 'privacy')} lang={languageInfo[language].tag} hreflang={languageInfo[language].tag}>{languageInfo[language].label}</a>)}</div></article>)}</div>
+</section>}
 <section id="contact" class="contact-section container">
   <div class="contact-panel"><div><p class="eyebrow">{t.contactEyebrow}</p><h2>{t.contactTitle.split('\n').map((line, i) => <>{i > 0 && <br />}{line}</>)}</h2></div><div class="contact-details"><p>{t.contactBody}</p><a href={`mailto:${site.email}?subject=${encodeURIComponent(`Hello ${site.name}`)}`}>{site.email}<Arrow diagonal /></a></div></div>
 </section>
