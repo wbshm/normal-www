@@ -122,7 +122,9 @@ if (process.env.SITE_ORIGIN) {
     assert(response.ok, `${url.href}: HTTP ${response.status}`);
     const content = await response.text();
     if (!path.endsWith('.xml') && !path.endsWith('.txt')) {
-      assert(content.includes(siteName), `${url.href}: unexpected deployment content.`);
+      const localHtml = await readFile(new URL(`${path.slice(1)}index.html`, root), 'utf8');
+      const expectedTitle = localHtml.match(/<title>[^<]+<\/title>/)?.[0];
+      assert(expectedTitle && content.includes(expectedTitle), `${url.href}: unexpected deployment page title.`);
       assert(!/<script(?:\s|>)/i.test(content), `${url.href}: unexpected script in published page.`);
     }
     console.log(`HTTP ${response.status} ${url.href}`);

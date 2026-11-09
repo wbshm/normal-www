@@ -4,7 +4,7 @@ import { apps, type App } from '../lib/apps';
 import { site, locales, kinds, type ContentLocale } from '../data/site';
 import { policyApps, policyLocales, type PolicyApp } from '../data/policies';
 import { copy } from '../lib/i18n';
-import { pagePath } from '../lib/urls';
+import { pagePath, pageUrl } from '../lib/urls';
 import Layout from '../layouts/Layout.astro';
 import Home from '../components/Home.astro';
 import Product from '../components/Product.astro';
@@ -57,10 +57,16 @@ const homeLocale = locale === 'ja' ? 'en' : locale;
 const rendered = entry ? await render(entry) : undefined;
 const Content = rendered?.Content;
 const t = copy[homeLocale];
-const title = entry ? `${entry.data.title} | ${site.name}` : `${site.name} — ${t.hero}${locale === 'en' ? ' ' : ''}${t.heroAccent}`;
+const appName = policyApp?.names[locale] ?? app?.locales[homeLocale].name;
+const appBrand = appName ? {
+  name: appName,
+  href: app ? pageUrl(homeLocale, app.slug) : pageUrl(locale, policyApp?.slug, 'privacy'),
+  icon: app?.icon,
+} : undefined;
+const title = entry ? entry.data.title : `${site.name} — ${t.hero}${locale === 'en' ? ' ' : ''}${t.heroAccent}`;
 const description = entry?.data.description ?? t.intro;
 ---
-<Layout locale={locale} title={title} description={description} slug={app?.slug ?? policyApp?.slug} kind={entry?.data.kind} image={app?.icon} availableLocales={policyApp ? policyLocales(policyApp) : locales}>
+<Layout locale={locale} title={title} description={description} slug={app?.slug ?? policyApp?.slug} kind={entry?.data.kind} image={app?.icon} availableLocales={policyApp ? policyLocales(policyApp) : locales} appBrand={appBrand}>
   {!entry && <Home locale={homeLocale} />}
   {app && entry?.data.kind === 'overview' && Content && <Product app={app} locale={homeLocale}><Content /></Product>}
   {entry && entry.data.kind !== 'overview' && Content && <Document app={app} appName={policyApp?.names[locale]} locale={locale} kind={entry.data.kind} title={entry.data.title} description={entry.data.description} headings={rendered?.headings ?? []} updated={entry.data.updated}><Content /></Document>}

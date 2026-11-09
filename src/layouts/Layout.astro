@@ -12,10 +12,12 @@ interface Props {
   kind?: PageKind;
   image?: string;
   noindex?: boolean;
+  appBrand?: { name: string; href: string; icon?: string };
 }
-const { locale, title, description, slug, kind = 'overview', image = '/favicon.svg', noindex = false, availableLocales = locales } = Astro.props;
+const { locale, title, description, slug, kind = 'overview', image = '/favicon.svg', noindex = false, availableLocales = locales, appBrand } = Astro.props;
 const t = copy[locale];
 const homeLocale = locale === 'ja' ? 'en' : locale;
+const brand = appBrand ?? { name: site.name, href: pageUrl(homeLocale), icon: '/favicon.svg' };
 const canonical = new URL(pageUrl(locale, slug, kind), site.url).href;
 const imageUrl = new URL(withBase(image), site.url).href;
 const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug} support` : `Hello ${site.name}`)}`;
@@ -35,9 +37,9 @@ const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug}
       {availableLocales.map((language) => <link rel="alternate" hreflang={languageInfo[language].tag} href={new URL(pageUrl(language, slug, kind), site.url).href} />)}
       <link rel="alternate" hreflang="x-default" href={new URL(pageUrl('en', slug, kind), site.url).href} />
     </>}
-    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="icon" href={withBase(brand.icon ?? '/favicon.svg')} />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={site.name} />
+    <meta property="og:site_name" content={brand.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={noindex ? Astro.url.href : canonical} />
@@ -52,9 +54,9 @@ const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug}
   <body>
     <a class="skip-link" href="#main">{t.skip}</a>
     <header class="site-header container">
-      <a class="brand" href={pageUrl(homeLocale)} aria-label={site.name}>
-        <img src={withBase('/favicon.svg')} alt="" width="35" height="35" />
-        <span>{site.name}</span>
+      <a class="brand" href={brand.href} aria-label={brand.name}>
+        {brand.icon && <img src={withBase(brand.icon)} alt="" width="35" height="35" />}
+        <span>{brand.name}</span>
       </a>
       <nav class:list={['main-nav', { 'multilingual-nav': availableLocales.length > 2 }]} aria-label={locale === 'en' ? 'Main navigation' : locale === 'ja' ? 'メインナビゲーション' : '主导航'}>
         <a href={`${pageUrl(homeLocale)}#apps`}>{t.apps}</a>
@@ -64,8 +66,8 @@ const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug}
     </header>
     <main id="main"><slot /></main>
     <footer class="site-footer container">
-      <div><a class="footer-brand" href={pageUrl(homeLocale)}>{site.name}</a><p>{t.footer}</p></div>
-      <div class="footer-end"><a href={email}>{site.email}</a><span>© {new Date().getUTCFullYear()} {t.rights}</span></div>
+      <div><a class="footer-brand" href={brand.href}>{brand.name}</a><p>{t.footer}</p></div>
+      <div class="footer-end"><a href={email}>{site.email}</a><span>© {new Date().getUTCFullYear()} {appBrand?.name ?? t.rights}</span></div>
     </footer>
   </body>
 </html>
