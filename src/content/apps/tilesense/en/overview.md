@@ -27,6 +27,8 @@ Lessons also explain rule differences, including seven pairs, thirteen orphans, 
 
 Answers are checked by a tile-efficiency engine, with visual explanations to help you understand the reasoning.
 
+An optional daily practice reminder lets you choose a time in Me. It is off by default and skips days when you have already finished today's practice.
+
 ## Try a hand of your own
 
 Enter a hand and compare the shanten and effective tiles for each possible discard. Mark tiles you have already seen on the table to compare the draws that are still available.
@@ -43,6 +45,6 @@ A single in-app purchase unlocks all lessons, focused drills, mistake review and
 
 No account is needed. Learning progress and settings stay on your device, without cross-device progress sync. Purchases and restoring purchases use Apple's App Store services and may require a connection.
 
-TileSense is made for iPhone, requires iOS 17 or later, and supports English, Simplified Chinese and Japanese. Choose classic tile artwork or large numbers, with three tile-back colors.
+TileSense is made for iPhone, requires iOS 17 or later, and supports English, Simplified Chinese, Japanese, Korean, Indonesian and Malay. Choose classic tile artwork or large numbers, with three tile-back colors.
 
 TileSense is for lessons and exercises only, with no matches, gambling, chips or real-money play. Read the [privacy policy](privacy/) or visit [support](support/) for help with data and purchases.

@@ -18,6 +18,12 @@ Start with Mahjong Basics on the lessons tab, then work through tile efficiency,
 
 Today's practice has 5 questions. The skill check has 10 discard questions and charts your progress. Focused drills cover discards, shanten and effective tiles. Missed questions are saved in the mistake book and removed when you answer them correctly in review.
 
+## How do I set a daily practice reminder?
+
+Daily reminders are off by default. Open **Me → Daily reminder** and allow notifications, then choose a time under **Reminder time**. You can turn reminders off at any time. Once you finish today's practice, you won't receive another reminder that day.
+
+If reminders don't arrive, check TileSense's notification permission in iOS Settings.
+
 ## What's free, and what does the unlock include?
 
 Free content includes the Basics unit, the first two Tile Efficiency lessons, today's practice and the skill check once each per day, and 5 hand analyses a day.
@@ -36,7 +42,7 @@ Learning progress and settings stay on the current device, without cross-device 
 
 ## How do I change the language or tile style?
 
-**Me → Language** opens TileSense's page in iOS Settings. If there is no Language option, add a second language in Settings → General → Language & Region first. TileSense supports English, Simplified Chinese and Japanese.
+**Me → Language** opens TileSense's page in iOS Settings. If there is no Language option, add a second language in Settings → General → Language & Region first. TileSense supports English, Simplified Chinese, Japanese, Korean, Indonesian and Malay.
 
 Open **Me → Tile style** to choose classic artwork or large numbers, with three tile-back colors.
 

@@ -75,7 +75,9 @@ ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/ SITE_ORIGIN=https://wangrq.cn npm run 
 
 ## 牌感与额外政策语言
 
-牌感与另外两个 App 使用相同的首页卡片、介绍页和用户支持模板。产品资料、图标及截图来自本机 `/Users/wangrq/Documents/Project/Ma`，最低 iOS 17 依据 Xcode 工程确认。当前按 `coming-soon` 展示，没有配置未经核实的商店地址。
+牌感与另外两个 App 使用相同的首页卡片、介绍页和用户支持模板。产品资料、图标及截图来自本机 `/Users/wangrq/Documents/Project/Ma`，最低 iOS 17 依据 Xcode 工程确认。牌感已在 App Store 上线，状态为 `available`，中英文首页和介绍页均提供下载按钮，地址使用 Apple 官方接口返回的[美区商品页](https://apps.apple.com/us/app/tilesense-mahjong-trainer/id6830058870)。
+
+2026-11-14 通过 Apple Lookup API 核实美国、日本商店均可查询，App ID 为 `6830058870`，Bundle ID 为 `com.wang.TileSense`，开发者为「瑞庆 王」，当前版本为 1.1。中国区当日未查询到该 App；当前网络访问通用链接及美区网页会跳转中国区商店首页，不据此声称中国区可下载。介绍页和支持页同步说明六种界面语言（简体中文、英文、日文、韩文、印尼文、马来文）与默认关闭的每日练习提醒，提醒行为已核对本地 App 实现。
 
 `src/data/policies.ts` 的 `policyApps` 登记政策翻译，可为完整产品补充额外语言，也可接入只有政策的 App。与产品重复的中英文政策只生成一次；首页仅为尚未接入完整产品的 App 单独显示政策卡片。
 

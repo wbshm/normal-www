@@ -99,7 +99,8 @@
   {
     "slug": "tilesense",
     "category": "tool",
-    "status": "coming-soon",
+    "status": "available",
+    "appStoreUrl": "https://apps.apple.com/us/app/tilesense-mahjong-trainer/id6830058870",
     "icon": "/images/tilesense/icon.png",
     "screenshots": [
       { "src": "/images/tilesense/learn.webp", "en": "A learning path, one lesson at a time", "zh": "沿着课程路径，一点点学会" },
@@ -117,14 +118,14 @@
         "tagline": "Better hands. One tile at a time.",
         "description": "Learn mahjong step by step, from your first tiles to smarter discards. Short lessons, visual explanations and a hand analyzer help you understand each choice.",
         "highlights": ["7 units, 34 lessons", "Daily practice & review", "Hand analyzer"],
-        "screenshotNote": "Actual in-app screenshots, shown in Simplified Chinese. TileSense also supports English and Japanese."
+        "screenshotNote": "Actual in-app screenshots, shown in Simplified Chinese. TileSense also supports English, Japanese, Korean, Indonesian and Malay."
       },
       "zh": {
         "name": "牌感",
         "tagline": "每天几分钟，慢慢练出牌感。",
         "description": "从认识麻将牌，到理解每一次取舍。用短课、图解和每日练习学会牌效，再用手牌分析器比较下一张该打什么。",
         "highlights": ["7 个单元，34 节课", "每日练习与错题复习", "手牌分析器"],
-        "screenshotNote": "来自牌感 App 的实际截图，展示简体中文界面。牌感同时支持英文和日文。"
+        "screenshotNote": "来自牌感 App 的实际截图，展示简体中文界面。牌感同时支持英文、日文、韩文、印尼文和马来文。"
       }
     }
   }
