@@ -5,9 +5,9 @@
     "status": "coming-soon",
     "icon": "/images/anglepop/icon.png",
     "screenshots": [
-      { "src": "/images/anglepop/home.webp", "en": "A quiet place to start", "zh": "从这里，轻松开始" },
-      { "src": "/images/anglepop/gameplay.webp", "en": "Find your perfect angle", "zh": "找到刚刚好的角度" },
-      { "src": "/images/anglepop/levels.webp", "en": "A new puzzle around every corner", "zh": "每一关，都有新的可能" }
+      { "src": "/images/anglepop/home.webp", "en": "Home", "zh": "首页" },
+      { "src": "/images/anglepop/gameplay.webp", "en": "Gameplay", "zh": "反弹路线" },
+      { "src": "/images/anglepop/levels.webp", "en": "Level selection", "zh": "关卡选择" }
     ],
     "appStoreUrl": "https://apps.apple.com/app/id6813855087",
     "platform": "iPhone",
@@ -16,17 +16,15 @@
     "locales": {
       "en": {
         "name": "Anglepop",
-        "tagline": "One shot. Just right.",
-        "description": "Pick your starting point. Find your angle. Clear every block with a single, satisfying shot.",
-        "highlights": ["288 main levels", "A daily challenge", "Light & dark themes"],
-        "screenshotNote": "Actual in-app screenshots, shown in Simplified Chinese. Anglepop also supports English."
+        "tagline": "Clear every block in one shot",
+        "description": "Choose a starting point, aim and bounce the ball through every block. Preview the route and retry as often as you like.",
+        "highlights": ["288 main levels", "Daily challenge", "Light & dark themes"]
       },
       "zh": {
         "name": "Anglepop",
-        "tagline": "弹一下，刚刚好。",
-        "description": "自由选起点，找到合适的角度。让小球沿着反弹路线，一次发射，清除全部目标。",
-        "highlights": ["288 个主线关卡", "每日挑战", "亮暗主题"],
-        "screenshotNote": "实际 App 截图，展示简体中文界面。Anglepop 同时支持英文。"
+        "tagline": "一球清除所有方块",
+        "description": "选择起点和角度，让小球反弹击中所有目标。支持路线预览，不限重试次数。",
+        "highlights": ["288 个主线关卡", "每日挑战", "亮暗主题"]
       }
     }
   },
@@ -39,33 +37,33 @@
     "screenshots": [
       {
         "src": "/images/checkinduck/dashboard.webp",
-        "en": "Today’s habits, at a glance",
-        "zh": "今天的习惯，一眼看清"
+        "en": "Today's tasks",
+        "zh": "今日任务"
       },
       {
         "src": "/images/checkinduck/calendar.webp",
-        "en": "Small steps, day after day",
-        "zh": "每一天的小小积累"
+        "en": "Check-in calendar",
+        "zh": "打卡日历"
       },
       {
         "src": "/images/checkinduck/create-task.webp",
-        "en": "A habit that fits your day",
-        "zh": "设定适合自己的打卡规则"
+        "en": "Create a task",
+        "zh": "创建任务"
       },
       {
         "src": "/images/checkinduck/widget.webp",
-        "en": "Your progress, on the Home Screen",
-        "zh": "桌面上，也能看到进度"
+        "en": "Home Screen widget",
+        "zh": "桌面小组件"
       },
       {
         "src": "/images/checkinduck/onboarding.webp",
-        "en": "A little help getting started",
-        "zh": "从这里，开始一个好习惯"
+        "en": "Setup",
+        "zh": "初始设置"
       },
       {
         "src": "/images/checkinduck/premium.webp",
-        "en": "More room for your routines",
-        "zh": "为更多习惯，留出空间"
+        "en": "Premium",
+        "zh": "Premium"
       }
     ],
     "platform": "iPhone",
@@ -74,25 +72,23 @@
     "locales": {
       "en": {
         "name": "CheckInDuck",
-        "tagline": "Little habits. Every day.",
-        "description": "Choose an app, set a daily goal, and let your usage count toward a check-in. Gentle reminders and a calendar help you keep going.",
+        "tagline": "Automatic check-ins for app usage",
+        "description": "Set a daily usage goal for an app. CheckInDuck checks it off when you reach it, with deadline reminders and a calendar of your records.",
         "highlights": [
           "Automatic check-ins",
           "Calendar & notes",
           "Home Screen widgets"
-        ],
-        "screenshotNote": "Original in-app screenshots from CheckInDuck, shown in English."
+        ]
       },
       "zh": {
         "name": "打卡鸭",
-        "tagline": "每天一点点，好习惯慢慢来。",
-        "description": "选一个 App，定下每天的小目标。使用时长达标，就自动打卡；配合截止提醒和日历记录，让坚持轻松一点。",
+        "tagline": "按 App 使用时长自动打卡",
+        "description": "设定每天的 App 使用目标，时长达标后自动打卡。支持截止提醒、日历记录和桌面小组件。",
         "highlights": [
           "使用达标，自动打卡",
           "日历记录与备注",
           "桌面小组件"
-        ],
-        "screenshotNote": "来自打卡鸭原官网的实际 App 截图，展示英文界面。"
+        ]
       }
     }
   },
@@ -103,11 +99,11 @@
     "appStoreUrl": "https://apps.apple.com/us/app/tilesense-mahjong-trainer/id6830058870",
     "icon": "/images/tilesense/icon.png",
     "screenshots": [
-      { "src": "/images/tilesense/learn.webp", "en": "A learning path, one lesson at a time", "zh": "沿着课程路径，一点点学会" },
-      { "src": "/images/tilesense/why.webp", "en": "See why, with visual explanations", "zh": "答错也没关系，图解告诉你为什么" },
-      { "src": "/images/tilesense/guide.webp", "en": "Start with the basics", "zh": "从认牌开始，把基础弄明白" },
-      { "src": "/images/tilesense/analyze.webp", "en": "Compare your next discard", "zh": "输入手牌，比较每一种打法" },
-      { "src": "/images/tilesense/practice.webp", "en": "A little practice, every day", "zh": "每天几道题，慢慢练出牌感" }
+      { "src": "/images/tilesense/learn.webp", "en": "Courses", "zh": "课程" },
+      { "src": "/images/tilesense/why.webp", "en": "Answer explanations", "zh": "答案图解" },
+      { "src": "/images/tilesense/guide.webp", "en": "Mahjong basics", "zh": "麻将入门" },
+      { "src": "/images/tilesense/analyze.webp", "en": "Hand analyzer", "zh": "手牌分析" },
+      { "src": "/images/tilesense/practice.webp", "en": "Daily practice", "zh": "每日练习" }
     ],
     "platform": "iPhone",
     "requirement": "iOS 17+",
@@ -115,17 +111,85 @@
     "locales": {
       "en": {
         "name": "TileSense",
-        "tagline": "Better hands. One tile at a time.",
-        "description": "Learn mahjong step by step, from your first tiles to smarter discards. Short lessons, visual explanations and a hand analyzer help you understand each choice.",
-        "highlights": ["7 units, 34 lessons", "Daily practice & review", "Hand analyzer"],
-        "screenshotNote": "Actual in-app screenshots, shown in Simplified Chinese. TileSense also supports English, Japanese, Korean, Indonesian and Malay."
+        "tagline": "Mahjong lessons and hand analysis",
+        "description": "Study tile efficiency, defense and discard choices with 34 lessons, practice questions and a hand analyzer.",
+        "highlights": ["7 units, 34 lessons", "Daily practice & review", "Hand analyzer"]
       },
       "zh": {
         "name": "牌感",
-        "tagline": "每天几分钟，慢慢练出牌感。",
-        "description": "从认识麻将牌，到理解每一次取舍。用短课、图解和每日练习学会牌效，再用手牌分析器比较下一张该打什么。",
-        "highlights": ["7 个单元，34 节课", "每日练习与错题复习", "手牌分析器"],
-        "screenshotNote": "来自牌感 App 的实际截图，展示简体中文界面。牌感同时支持英文、日文、韩文、印尼文和马来文。"
+        "tagline": "麻将入门、牌效训练与手牌分析",
+        "description": "34 节课程，配合图解、练习题和手牌分析器，学习牌效、防守和弃牌判断。",
+        "highlights": ["7 个单元，34 节课", "每日练习与错题复习", "手牌分析器"]
+      }
+    }
+  },
+  {
+    "slug": "mapleoath",
+    "category": "tool",
+    "status": "coming-soon",
+    "icon": "/images/mapleoath/icon.png",
+    "screenshotStyle": "poster",
+    "screenshots": [
+      {
+        "src": { "en": "/images/mapleoath/en/1.webp", "zh": "/images/mapleoath/zh/1.webp" },
+        "en": "Question sources",
+        "zh": "题目来源",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/mapleoath/en/2.webp", "zh": "/images/mapleoath/zh/2.webp" },
+        "en": "Learning paths",
+        "zh": "学习主线",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/mapleoath/en/3.webp", "zh": "/images/mapleoath/zh/3.webp" },
+        "en": "Chapter practice",
+        "zh": "章节练习",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/mapleoath/en/4.webp", "zh": "/images/mapleoath/zh/4.webp" },
+        "en": "Mock test",
+        "zh": "模拟考试",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/mapleoath/en/5.webp", "zh": "/images/mapleoath/zh/5.webp" },
+        "en": "Dated facts",
+        "zh": "时效信息",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/mapleoath/en/6.webp", "zh": "/images/mapleoath/zh/6.webp" },
+        "en": "Full version",
+        "zh": "完整版",
+        "width": 880,
+        "height": 1912
+      }
+    ],
+    "platform": "iPhone",
+    "requirement": "iOS 17+",
+    "accent": "#f6e6d8",
+    "locales": {
+      "en": {
+        "name": "MapleOath",
+        "tagline": "Canadian citizenship test prep",
+        "description": "538 questions based on Discover Canada, with English–Chinese explanations, chapter practice and mock tests.",
+        "highlights": ["538 sourced questions", "5 guided paths", "One-time purchase"],
+        "screenshotNote": "Officials shown were checked on November 15, 2026. Refer to official sources for updates."
+      },
+      "zh": {
+        "name": "枫誓",
+        "tagline": "加拿大入籍考试备考",
+        "description": "538 道基于《Discover Canada》的题目，提供中英对照、章节练习和模拟考试。",
+        "highlights": ["538 题，每题有出处", "5 条学习主线", "一次买断，不订阅"],
+        "screenshotNote": "截图中的官员信息核实于 2026-11-15，以官方来源为准。"
       }
     }
   }

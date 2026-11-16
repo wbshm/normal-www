@@ -66,7 +66,7 @@ const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug}
     </header>
     <main id="main"><slot /></main>
     <footer class="site-footer container">
-      <div><a class="footer-brand" href={brand.href}>{brand.name}</a><p>{t.footer}</p></div>
+      <a class="footer-brand" href={brand.href}>{brand.name}</a>
       <div class="footer-end"><a href={email}>{site.email}</a><span>© {new Date().getUTCFullYear()} {appBrand?.name ?? t.rights}</span></div>
     </footer>
   </body>

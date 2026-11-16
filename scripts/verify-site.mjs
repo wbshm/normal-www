@@ -28,12 +28,24 @@ let checkedLinks = 0;
 const decode = (value) => value.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
 const attributes = (tag) => Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)].map((match) => [match[1], decode(match[2])]));
 
+function verifyScripts(html, label) {
+  const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+  const hasGallery = html.includes('data-screenshot-gallery');
+  assert.equal(scripts.length, hasGallery ? 1 : 0, `${label}: only screenshot galleries may load a client script.`);
+  for (const script of scripts) {
+    const attrs = attributes(script[1]);
+    assert.equal(attrs.type, 'module', `${label}: the image viewer must use a module script.`);
+    assert.equal(attrs.src, `${base}/scripts/screenshot-lightbox.js`, `${label}: unexpected client script.`);
+    assert.equal(script[2].trim(), '', `${label}: unexpected inline script.`);
+  }
+}
+
 for (const file of htmlFiles) {
   const html = await readFile(new URL(file, root), 'utf8');
   const logicalPath = file === 'index.html' ? '/' : file.endsWith('/index.html') ? `/${file.slice(0, -10)}` : `/${file}`;
   const url = new URL(`${base}${logicalPath}`, origin);
   assert.equal((html.match(/<h1(?:\s|>)/g) ?? []).length, 1, `${file}: expected exactly one h1.`);
-  assert(!/<script(?:\s|>)/i.test(html), `${file}: these static pages must work without JavaScript.`);
+  verifyScripts(html, file);
   assert(!/href=""|src=""|Lorem ipsum|TODO|example\.com|\[(?:你的名字|你的邮箱|Your (?:name|email)|あなたの名前|あなたのメールアドレス)\]/.test(html), `${file}: empty or placeholder content.`);
   const expectedLocale = file.startsWith('zh/') ? 'zh-CN' : file.startsWith('ja/') ? 'ja' : 'en';
   assert(html.includes(`<html lang="${expectedLocale}"`), `${file}: document language must be ${expectedLocale}.`);
@@ -45,7 +57,7 @@ for (const file of htmlFiles) {
       assert(html.includes(`hreflang="${lang}"`), `${file}: missing ${lang} alternate.`);
     }
   }
-  for (const match of html.matchAll(/<(?:a|link|img)\b[^>]*?\b(?:href|src)="([^"]+)"/g)) {
+  for (const match of html.matchAll(/<(?:a|link|img|script)\b[^>]*?\b(?:href|src)="([^"]+)"/g)) {
     const href = decode(match[1]);
     const target = new URL(href, url);
     if (target.origin !== new URL(origin).origin) continue;
@@ -67,10 +79,34 @@ const additionalPolicies = policyRoutes.filter((route) => route.locale !== 'en' 
 assert.equal(htmlFiles.length, 3 + apps.length * 6 + additionalPolicies.length, 'Expected two homepages, six pages per app, an extra Japanese TileSense policy, and a 404 page.');
 for (const app of apps) {
   for (const prefix of ['', 'zh/']) {
+    const locale = prefix ? 'zh' : 'en';
+    const product = await readFile(new URL(`${prefix}apps/${app.slug}/index.html`, root), 'utf8');
+    const home = await readFile(new URL(`${prefix}index.html`, root), 'utf8');
+    assert.equal((product.match(/<figure>/g) ?? []).length, app.screenshots.length, `${app.slug}: screenshot count mismatch.`);
+    assert(!product.includes('screenshots-hint'), `${app.slug}/${locale}: redundant screenshot instructions must not be rendered.`);
+    assert.equal((product.match(/class="screenshot-note"/g) ?? []).length, app.locales[locale].screenshotNote ? 1 : 0, `${app.slug}/${locale}: only app-specific screenshot notices should be rendered.`);
+    assert(!home.includes('class="preview-note"'), `${locale}: homepage screenshots must not repeat the app tagline.`);
+    for (const [index, shot] of app.screenshots.entries()) {
+      const source = typeof shot.src === 'string' ? shot.src : shot.src[locale];
+      assert(product.includes(`src="${base}${source}"`), `${app.slug}/${locale}: localized screenshot missing: ${source}`);
+      assert(product.includes(`href="${base}${source}"`), `${app.slug}/${locale}: full-size screenshot link missing: ${source}`);
+      if (index < 2 && app.status !== 'archived') assert(home.includes(`src="${base}${source}"`), `${app.slug}/${locale}: homepage screenshot missing.`);
+      if (typeof shot.src !== 'string') {
+        const otherSource = shot.src[locale === 'en' ? 'zh' : 'en'];
+        if (otherSource !== source) assert(!product.includes(`src="${base}${otherSource}"`), `${app.slug}/${locale}: screenshot from the wrong language.`);
+      }
+    }
     for (const kind of ['privacy', 'support']) {
       const content = await readFile(new URL(join(prefix, 'apps', app.slug, kind, 'index.html'), root), 'utf8');
       assert(content.includes(publicEmail), `${app.slug}/${kind}: public contact missing.`);
       if (kind === 'privacy') assert(content.includes('<time datetime='), `${app.slug}: policy effective date missing.`);
+      if (app.slug === 'mapleoath' && kind === 'privacy') {
+        assert(content.includes('<time datetime="2026-11-15"'), 'MapleOath policies must preserve the supplied update date.');
+        assert.equal((content.match(/<h2(?:\s|>)/g) ?? []).length, 7, 'MapleOath policy must preserve all seven supplied sections.');
+        const article = content.match(/<article\b[^>]*>([\s\S]*?)<\/article>/)?.[1];
+        assert(article?.includes(`mailto:${publicEmail}`), 'MapleOath policy body must include the support email.');
+        assert(!/to be added|发布前补上/.test(content), 'MapleOath policy must not contain the draft contact placeholder.');
+      }
     }
   }
 }
@@ -125,9 +161,9 @@ if (process.env.SITE_ORIGIN) {
       const localHtml = await readFile(new URL(`${path.slice(1)}index.html`, root), 'utf8');
       const expectedTitle = localHtml.match(/<title>[^<]+<\/title>/)?.[0];
       assert(expectedTitle && content.includes(expectedTitle), `${url.href}: unexpected deployment page title.`);
-      assert(!/<script(?:\s|>)/i.test(content), `${url.href}: unexpected script in published page.`);
+      verifyScripts(content, url.href);
     }
     console.log(`HTTP ${response.status} ${url.href}`);
   }
 }
-console.log(`Verified ${htmlFiles.length} HTML pages, ${checkedLinks} local links/assets, canonical URLs, language alternates, policy contacts, dates, and sitemap. No client JavaScript required.`);
+console.log(`Verified ${htmlFiles.length} HTML pages, ${checkedLinks} local links/assets, canonical URLs, language alternates, policy contacts, dates, and sitemap. Only the local screenshot viewer script is allowed; page content and navigation remain static.`);

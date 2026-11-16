@@ -1,5 +1,6 @@
 import { z } from 'astro/zod';
 import rawApps from '../data/apps.json';
+import type { Locale } from '../data/site';
 
 const translation = z.object({
   name: z.string().min(1),
@@ -14,7 +15,14 @@ const appSchema = z.object({
   category: z.enum(['game', 'tool']),
   status: z.enum(['coming-soon', 'available', 'archived']),
   icon: localAsset,
-  screenshots: z.array(z.object({ src: localAsset, en: z.string(), zh: z.string() })),
+  screenshots: z.array(z.object({
+    src: z.union([localAsset, z.object({ en: localAsset, zh: localAsset })]),
+    en: z.string(),
+    zh: z.string(),
+    width: z.number().int().positive().default(780),
+    height: z.number().int().positive().default(1688),
+  })),
+  screenshotStyle: z.enum(['screen', 'poster']).default('screen'),
   appStoreUrl: z.url().startsWith('https://apps.apple.com/').optional(),
   platform: z.string().min(1),
   requirement: z.string().min(1),
@@ -30,3 +38,7 @@ if (new Set(apps.map((app) => app.slug)).size !== apps.length) {
   throw new Error('App slugs must be unique permanent identifiers.');
 }
 export type App = (typeof apps)[number];
+
+export function screenshotSource(shot: App['screenshots'][number], locale: Locale): string {
+  return typeof shot.src === 'string' ? shot.src : shot.src[locale];
+}

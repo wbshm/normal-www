@@ -1,6 +1,6 @@
 # 啵啵的猫粮计划
 
-独立开发者的中英双语产品官网。收录 Anglepop、打卡鸭（CheckInDuck）和牌感（TileSense），每款 App 提供介绍、独立隐私政策和用户支持页面；牌感另提供日文隐私政策。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript。
+独立开发者的中英双语产品官网。收录 Anglepop、打卡鸭（CheckInDuck）、牌感（TileSense）和枫誓（MapleOath），每款 App 提供介绍、独立隐私政策和用户支持页面；牌感另提供日文隐私政策。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript；截图弹窗使用一个本地脚本增强交互。
 
 ## 本地开发
 
@@ -20,7 +20,7 @@ npm run verify
 npm run preview
 ```
 
-`verify` 检查静态页面、站内链接与资源、目录锚点、部署前缀、语言 alternate、canonical、政策日期、联系方式和 sitemap，并检查三个 App 的首页卡片、牌感介绍页及截图、三语政策的章节与语言切换。页面不允许含客户端脚本或占位内容。
+`verify` 检查静态页面、站内链接与资源、目录锚点、部署前缀、语言 alternate、canonical、政策日期、联系方式和 sitemap，并检查所有 App 的首页卡片、截图语言与大图入口、牌感三语政策以及枫誓政策的日期和完整性。仅截图区允许加载本地 `screenshot-lightbox.js` 模块，不允许其他客户端脚本、内联脚本或占位内容。
 
 ## 发布地址
 
@@ -36,6 +36,9 @@ npm run preview
 | 牌感 | https://wangrq.cn/apps/tilesense/ | https://wangrq.cn/zh/apps/tilesense/ |
 | 牌感隐私政策 | https://wangrq.cn/apps/tilesense/privacy/ | https://wangrq.cn/zh/apps/tilesense/privacy/ |
 | 牌感用户支持 | https://wangrq.cn/apps/tilesense/support/ | https://wangrq.cn/zh/apps/tilesense/support/ |
+| 枫誓 | https://wangrq.cn/apps/mapleoath/ | https://wangrq.cn/zh/apps/mapleoath/ |
+| 枫誓隐私政策 | https://wangrq.cn/apps/mapleoath/privacy/ | https://wangrq.cn/zh/apps/mapleoath/privacy/ |
+| 枫誓用户支持 | https://wangrq.cn/apps/mapleoath/support/ | https://wangrq.cn/zh/apps/mapleoath/support/ |
 
 牌感隐私政策的发布路径：
 
@@ -64,14 +67,14 @@ ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/ SITE_ORIGIN=https://wangrq.cn npm run 
    - `slug`：永久小写英文标识，只允许字母、数字、连字符，发布后不改。
    - `category`：`game` 或 `tool`。
    - `status`：`coming-soon`、`available` 或 `archived`。
-   - `icon`、`screenshots`：文件放在 `public/images/{slug}/`，配置用 `/images/...` 逻辑路径。
+   - `icon`、`screenshots`：文件放在 `public/images/{slug}/`，配置用 `/images/...` 逻辑路径。截图的 `src` 可以是共用路径或 `{ "en": "英文图片路径", "zh": "中文图片路径" }`；`width`、`height` 可填写图片实际尺寸，默认 780 × 1688。已合成的宣传图设置 `screenshotStyle: "poster"`，会保留完整画面并使用适合阅读的移动端布局。
    - `platform`、`requirement`、六位十六进制 `accent`。`appStoreUrl` 可省略；状态为 `available` 时必须填写已核实的 App Store 地址。
    - `locales.en` 和 `locales.zh`：名称、标语、简介、亮点。截图提供双语说明。
 2. 添加六份 Markdown：`src/content/apps/{slug}/{en,zh}/{overview,privacy,support}.md`。
 3. frontmatter 填 `app`、`locale`、`kind`、`title`、`description`。双语政策另填相同的 `updated: "YYYY-MM-DD"` 生效日期。
 4. 执行 `npm run check && npm run build && npm run verify`，确认文案、真实数据处理情况和图片，再提交。
 
-页面与 sitemap 自动生成，无需改模板。`screenshots` 可为空，此时省略截图区、首页使用图标。每款 App 的截图语言说明由配置提供。
+页面与 sitemap 自动生成，无需改模板。所有产品介绍页统一使用「精简产品信息 → 单行横向截图 → 详细介绍 → 支持入口」顺序。截图支持触摸滑动、横向滚动和键盘方向键，使用 CSS 滚动吸附对齐。点击图片会在当前页的原生 `dialog` 弹窗中放大，支持前后切图、方向键、Esc、关闭按钮和遮罩关闭，并恢复焦点；脚本不可用时保留原始大图链接。弹窗逻辑位于 `public/scripts/screenshot-lightbox.js`，由共享的 `ScreenshotGallery.astro` 组件加载，无第三方依赖。`screenshots` 可为空，此时省略截图区、首页使用图标。每款 App 的截图语言说明由配置提供。
 
 ## 牌感与额外政策语言
 
@@ -91,6 +94,14 @@ ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/ SITE_ORIGIN=https://wangrq.cn npm run 
 - 改名只改双语名称，保留 slug；政策地址不含版本号或日期。
 - 下架改为 `archived`，从首页隐藏；介绍、政策和支持页面继续保留，不删除配置或文档。
 - 若有已提交的旧政策或支持 URL，保留旧页面或文件并指向新地址。旧仓库文件链接不能只靠新站重定向兼容。
+
+## 枫誓接入
+
+枫誓的中英文介绍、隐私政策和用户支持位于 `src/content/apps/mapleoath/{en,zh}/`。产品文案依据 `/Users/wangrq/Documents/Project/MapleOath/docs/appstore/上架材料.md`，支持说明同时核对本地 App 的设置、学习进度和购买实现。iPhone、iOS 17+ 依据 Xcode 工程确认。当前标记为 `coming-soon`；取得公开的 App Store 地址后，在 `src/data/apps.json` 填写 `appStoreUrl` 并切换为 `available`。
+
+隐私政策保留提供的中英文正文和 2026-11-15 日期，支持邮箱使用网站已有的 `wrq142857@gmail.com`。英文隐私政策、支持页和介绍页可分别用于 App Store Connect 的 Privacy Policy URL、Support URL 和 Marketing URL。
+
+图标来自 `MapleOath/Assets.xcassets/AppIcon.appiconset/AppIcon.png`；12 张宣传图来自 `docs/appstore/screenshots/{en,zh-Hans}/1.png` 至 `6.png`，按原比例缩为 880 × 1912 的 WebP，保留标题、配色与放大区域。英文页面使用英文图，中文页面使用中文图，图片可点开查看。第 5 张中的信息核实日期为 2026-11-15，已在截图说明中标注。
 
 ## Anglepop 上架接入
 
