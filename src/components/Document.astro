@@ -3,16 +3,33 @@ import type { MarkdownHeading } from 'astro';
 import type { App } from '../lib/apps';
 import { languageInfo, type ContentLocale, type PageKind } from '../data/site';
 import { copy } from '../lib/i18n';
-import { pageUrl, withBase } from '../lib/urls';
+import { pageUrl } from '../lib/urls';
+import AppPageNav from './AppPageNav.astro';
 interface Props { app?: App; appName?: string; locale: ContentLocale; kind: Exclude<PageKind, 'overview'>; title: string; description: string; headings: MarkdownHeading[]; updated?: string; }
 const { app, appName, locale, kind, title, description, headings, updated } = Astro.props;
 const t = copy[locale];
 const homeLocale = locale === 'ja' ? 'en' : locale;
 const name = appName ?? app?.locales[homeLocale].name;
+const sections = headings.filter((heading) => heading.depth === 2);
 const formattedDate = updated ? new Intl.DateTimeFormat(languageInfo[locale].date, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${updated}T00:00:00Z`)) : undefined;
 ---
-<div class="container document-page">
+<div class="container document-page" style={app && `--app-accent: ${app.accent}`}>
   <a class="breadcrumb" href={app ? pageUrl(homeLocale, app.slug) : `${pageUrl(homeLocale)}#privacy-policies`}><span aria-hidden="true">←</span>{app ? name : t.back}</a>
-  <div class="document-header"><h1>{title}</h1><p class="document-description">{description}</p>{formattedDate && <p class="effective-date">{t.effective}: <time datetime={updated}>{formattedDate}</time></p>}</div>
-  <div class="document-grid"><aside class="document-sidebar">{app ? <><a class="sidebar-app" href={pageUrl(homeLocale, app.slug)}><img src={withBase(app.icon)} width="38" height="38" alt="" />{name}</a><nav class="document-nav" aria-label={locale === 'en' ? 'App pages' : locale === 'ja' ? 'アプリのページ' : 'App 页面'}><a href={pageUrl(homeLocale, app.slug)}>{t.about}</a><a href={pageUrl(locale, app.slug, 'privacy')} aria-current={kind === 'privacy' ? 'page' : undefined}>{t.privacy}</a><a href={pageUrl(homeLocale, app.slug, 'support')} aria-current={kind === 'support' ? 'page' : undefined}>{t.support}</a></nav></> : <p class="sidebar-app">{name}</p>}<nav class="table-of-contents" aria-label={t.contents}><p>{t.contents}</p>{headings.filter((heading) => heading.depth === 2).map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}</nav></aside><article class="prose document-content"><slot /></article></div>
+  <header class="document-header">
+    <h1>{title}</h1>
+    <p class="document-description">{description}</p>
+    {formattedDate && <p class="effective-date">{t.effective} <time datetime={updated}>{formattedDate}</time></p>}
+  </header>
+  {app && <AppPageNav slug={app.slug} locale={locale} current={kind} />}
+  <div class:list={['document-grid', { 'document-grid--single': sections.length === 0 }]}>
+    {sections.length > 0 && <aside class="document-sidebar">
+      <details class="document-index" open>
+        <summary>{t.contents}</summary>
+        <nav class="table-of-contents" aria-label={t.contents}>
+          {sections.map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}
+        </nav>
+      </details>
+    </aside>}
+    <article class="prose document-content"><slot /></article>
+  </div>
 </div>

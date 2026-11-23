@@ -134,6 +134,9 @@ for (const route of policyRoutes) {
 assert.deepEqual([...policyDates], ['2026-11-03'], 'TileSense policies must share the agreed effective date.');
 for (const prefix of ['', 'zh/']) {
   const home = await readFile(new URL(`${prefix}index.html`, root), 'utf8');
+  assert(!home.includes(publicEmail) && !home.includes('mailto:'), `${prefix || 'en/'} homepage: omit direct contact information.`);
+  const footer = home.match(/<footer\b[^>]*>([\s\S]*?)<\/footer>/)?.[1];
+  assert(footer?.includes('href="https://beian.miit.gov.cn/"') && footer.includes('闽ICP备2025110219号-2'), `${prefix || 'en/'} homepage: required ICP filing link missing.`);
   assert(home.includes(`href="${base}/${prefix}apps/tilesense/privacy/"`), `${prefix || 'en/'} homepage: TileSense policy entry missing.`);
   const standaloneCards = [...home.matchAll(/<article class="policy-card">([\s\S]*?)<\/article>/g)];
   assert(!standaloneCards.some((match) => match[1].includes('/apps/tilesense/')), `${prefix || 'en/'} homepage: TileSense must use the shared app card instead of a standalone policy card.`);

@@ -3,17 +3,17 @@ import type { App } from '../lib/apps';
 import type { Locale } from '../data/site';
 import { copy } from '../lib/i18n';
 import { pageUrl, withBase } from '../lib/urls';
-import Arrow from './Arrow.astro';
 import AppAction from './AppAction.astro';
+import AppPageNav from './AppPageNav.astro';
 import ScreenshotGallery from './ScreenshotGallery.astro';
 interface Props { app: App; locale: Locale; }
 const { app, locale } = Astro.props;
 const t = copy[locale];
 const translation = app.locales[locale];
 ---
-<div class="container product-page" data-app={app.slug}>
+<div class="container product-page" data-app={app.slug} style={`--app-accent: ${app.accent}`}>
   <a class="breadcrumb" href={`${pageUrl(locale)}#apps`}><span aria-hidden="true">←</span>{t.back}</a>
-  <section class="product-hero" style={`--app-accent: ${app.accent}`}>
+  <section class="product-hero">
     <div class="product-hero-copy">
       <div class="product-identity">
         <img class="app-icon" src={withBase(app.icon)} alt="" width="88" height="88" />
@@ -28,10 +28,9 @@ const translation = app.locales[locale];
     </div>
     <div class="product-hero-actions">
       <AppAction app={app} locale={locale} />
-      <div class="product-legal-links"><a href={pageUrl(locale, app.slug, 'privacy')}>{t.privacy}</a><span aria-hidden="true">·</span><a href={pageUrl(locale, app.slug, 'support')}>{t.support}</a></div>
     </div>
   </section>
+  <AppPageNav slug={app.slug} locale={locale} current="overview" />
   {app.screenshots.length > 0 && <ScreenshotGallery app={app} locale={locale} />}
   <section class="product-story prose"><slot /></section>
-  <div class="help-panel"><div class="help-links"><a class="text-link" href={pageUrl(locale, app.slug, 'privacy')}>{t.privacy}<Arrow diagonal /></a><a class="text-link" href={pageUrl(locale, app.slug, 'support')}>{t.support}<Arrow diagonal /></a></div></div>
 </div>
