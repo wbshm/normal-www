@@ -66,7 +66,7 @@ const appBrand = appName ? {
 const title = entry ? entry.data.title : `${site.name} — ${t.hero}${locale === 'en' ? ' ' : ''}${t.heroAccent}`;
 const description = entry?.data.description ?? t.intro;
 ---
-<Layout locale={locale} title={title} description={description} slug={app?.slug ?? policyApp?.slug} kind={entry?.data.kind} image={app?.icon} availableLocales={policyApp ? policyLocales(policyApp) : locales} appBrand={appBrand}>
+<Layout locale={locale} title={title} description={description} slug={app?.slug ?? policyApp?.slug} kind={entry?.data.kind} image={app?.icon} availableLocales={policyApp ? policyLocales(policyApp) : locales} appBrand={appBrand} homepage={!entry}>
   {!entry && <Home locale={homeLocale} />}
   {app && entry?.data.kind === 'overview' && Content && <Product app={app} locale={homeLocale}><Content /></Product>}
   {entry && entry.data.kind !== 'overview' && Content && <Document app={app} appName={policyApp?.names[locale]} locale={locale} kind={entry.data.kind} title={entry.data.title} description={entry.data.description} headings={rendered?.headings ?? []} updated={entry.data.updated}><Content /></Document>}

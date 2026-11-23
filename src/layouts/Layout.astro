@@ -12,15 +12,17 @@ interface Props {
   kind?: PageKind;
   image?: string;
   noindex?: boolean;
+  homepage?: boolean;
   appBrand?: { name: string; href: string; icon?: string };
 }
-const { locale, title, description, slug, kind = 'overview', image = '/favicon.svg', noindex = false, availableLocales = locales, appBrand } = Astro.props;
+const { locale, title, description, slug, kind = 'overview', image = '/favicon.svg', noindex = false, homepage = false, availableLocales = locales, appBrand } = Astro.props;
 const t = copy[locale];
 const homeLocale = locale === 'ja' ? 'en' : locale;
 const brand = appBrand ?? { name: site.name, href: pageUrl(homeLocale), icon: '/favicon.svg' };
 const canonical = new URL(pageUrl(locale, slug, kind), site.url).href;
 const imageUrl = new URL(withBase(image), site.url).href;
 const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug} support` : `Hello ${site.name}`)}`;
+const copyright = `© ${new Date().getUTCFullYear()} ${appBrand?.name ?? t.rights}`;
 ---
 <!doctype html>
 <html lang={languageInfo[locale].tag}>
@@ -53,24 +55,96 @@ const email = `mailto:${site.email}?subject=${encodeURIComponent(slug ? `${slug}
   </head>
   <body>
     <a class="skip-link" href="#main">{t.skip}</a>
-    <header class="site-header container">
+    <header class:list={['site-header', 'container', { 'home-header': homepage }]}>
       <a class="brand" href={brand.href} aria-label={brand.name}>
         {brand.icon && <img src={withBase(brand.icon)} alt="" width="35" height="35" />}
         <span>{brand.name}</span>
       </a>
       <nav class:list={['main-nav', { 'multilingual-nav': availableLocales.length > 2 }]} aria-label={locale === 'en' ? 'Main navigation' : locale === 'ja' ? 'メインナビゲーション' : '主导航'}>
         <a href={`${pageUrl(homeLocale)}#apps`}>{t.apps}</a>
-        <a href={email}>{t.contact}</a>
-        <div class="language-options">{availableLocales.filter((language) => language !== locale).map((language) => <a class="language-switch" href={pageUrl(language, slug, kind)} lang={languageInfo[language].tag} hreflang={languageInfo[language].tag} aria-label={languageInfo[language].read}>{languageInfo[language].label}<span aria-hidden="true">↗</span></a>)}</div>
+        <a href={homepage ? '#contact' : email}>{t.contact}</a>
+        <div class="language-options">{availableLocales.filter((language) => language !== locale).map((language) => <a class="language-switch" href={pageUrl(language, slug, kind)} lang={languageInfo[language].tag} hreflang={languageInfo[language].tag} aria-label={languageInfo[language].read}>{languageInfo[language].label}{!homepage && <span aria-hidden="true">↗</span>}</a>)}</div>
       </nav>
     </header>
     <main id="main"><slot /></main>
-    <footer class="site-footer container">
+    <footer class:list={['site-footer', 'container', { 'home-footer': homepage }]} id={homepage ? 'contact' : undefined}>
       <a class="footer-brand" href={brand.href}>{brand.name}</a>
-      <div class="footer-end"><a href={email}>{site.email}</a><span>© {new Date().getUTCFullYear()} {appBrand?.name ?? t.rights}</span></div>
+      <div class="footer-end"><a href={email}>{site.email}</a>{!homepage && <span>{copyright}</span>}</div>
       <div class="footer-icp">
+        {homepage && <span>{copyright}</span>}
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" lang="zh-CN">{site.icpFilingNumber}</a>
       </div>
     </footer>
   </body>
 </html>
+
+<style>
+  .home-header {
+    height: 74px;
+  }
+
+  .home-header .main-nav {
+    gap: clamp(11px, 2.4vw, 28px);
+    font-size: .875rem;
+  }
+
+  .home-header .language-switch {
+    padding: 7px 10px;
+  }
+
+  .home-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px 24px;
+    margin-top: clamp(45px, 7vw, 80px);
+    padding-block: 24px 17px;
+  }
+
+  .home-footer .footer-brand {
+    justify-self: start;
+  }
+
+  .home-footer .footer-end {
+    color: var(--ink);
+    font-size: .875rem;
+  }
+
+  .home-footer .footer-icp {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px 20px;
+    grid-column: 1 / -1;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    line-height: 1.6;
+  }
+
+  .home-footer .footer-icp a {
+    text-decoration-color: #9eb2a7;
+  }
+
+  @media (max-width: 480px) {
+    .home-header {
+      height: 62px;
+    }
+
+    .home-header .brand {
+      font-size: .9375rem;
+    }
+
+    .home-header .main-nav {
+      font-size: .8125rem;
+    }
+
+    .home-footer {
+      row-gap: 10px;
+      grid-template-columns: 1fr;
+    }
+
+    .home-footer .footer-icp {
+      margin-top: 6px;
+    }
+  }
+</style>
