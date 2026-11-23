@@ -2,6 +2,7 @@ export const site = {
   name: '啵啵的猫粮计划',
   developer: '啵啵的猫粮计划',
   email: 'wrq142857@gmail.com',
+  icpFilingNumber: '闽ICP备2025110219号-2',
   url: import.meta.env.SITE,
 } as const;
 

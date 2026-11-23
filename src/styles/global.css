@@ -530,6 +530,7 @@ p {
   padding-bottom: 37px;
   border-top: 1px solid var(--line);
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: 30px;
@@ -548,6 +549,18 @@ p {
   text-align: right;
   font-size: 11px;
   color: var(--muted);
+}
+
+.footer-icp {
+  width: 100%;
+  text-align: center;
+  font-size: .8125rem;
+  color: var(--muted);
+}
+
+.footer-icp a {
+  text-decoration: underline;
+  text-underline-offset: .2em;
 }
 
 .breadcrumb {
