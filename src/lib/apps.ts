@@ -1,6 +1,6 @@
 import { z } from 'astro/zod';
 import rawApps from '../data/apps.json';
-import type { Locale } from '../data/site';
+import { productLocales, type ProductLocale } from '../data/site';
 
 const translation = z.object({
   name: z.string().min(1),
@@ -16,9 +16,10 @@ const appSchema = z.object({
   status: z.enum(['coming-soon', 'available', 'archived']),
   icon: localAsset,
   screenshots: z.array(z.object({
-    src: z.union([localAsset, z.object({ en: localAsset, zh: localAsset })]),
+    src: z.union([localAsset, z.object({ en: localAsset, zh: localAsset.optional(), de: localAsset.optional() })]),
     en: z.string(),
     zh: z.string(),
+    de: z.string().optional(),
     width: z.number().int().positive().default(780),
     height: z.number().int().positive().default(1688),
   })),
@@ -27,7 +28,7 @@ const appSchema = z.object({
   platform: z.string().min(1),
   requirement: z.string().min(1),
   accent: z.string().regex(/^#[a-fA-F0-9]{6}$/),
-  locales: z.object({ en: translation, zh: translation }),
+  locales: z.object({ en: translation, zh: translation, de: translation.optional() }),
 }).refine((app) => app.status !== 'available' || Boolean(app.appStoreUrl), {
   message: 'Available apps require a verified App Store URL.',
   path: ['appStoreUrl'],
@@ -39,6 +40,10 @@ if (new Set(apps.map((app) => app.slug)).size !== apps.length) {
 }
 export type App = (typeof apps)[number];
 
-export function screenshotSource(shot: App['screenshots'][number], locale: Locale): string {
-  return typeof shot.src === 'string' ? shot.src : shot.src[locale];
+export function appLocales(app: App): ProductLocale[] {
+  return productLocales.filter((locale) => app.locales[locale]);
+}
+
+export function screenshotSource(shot: App['screenshots'][number], locale: ProductLocale): string {
+  return typeof shot.src === 'string' ? shot.src : shot.src[locale] ?? shot.src.en;
 }

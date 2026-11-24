@@ -1,9 +1,9 @@
 ---
 import type { App } from '../lib/apps';
-import type { Locale } from '../data/site';
+import type { ProductLocale } from '../data/site';
 import { copy } from '../lib/i18n';
 import Arrow from './Arrow.astro';
-interface Props { app: App; locale: Locale; }
+interface Props { app: App; locale: ProductLocale; }
 const { app, locale } = Astro.props;
 const t = copy[locale];
 ---

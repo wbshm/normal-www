@@ -1,18 +1,18 @@
 ---
 import type { App } from '../lib/apps';
-import type { Locale } from '../data/site';
+import { homeLocaleFor, type ProductLocale } from '../data/site';
 import { copy } from '../lib/i18n';
 import { pageUrl, withBase } from '../lib/urls';
 import AppAction from './AppAction.astro';
 import AppPageNav from './AppPageNav.astro';
 import ScreenshotGallery from './ScreenshotGallery.astro';
-interface Props { app: App; locale: Locale; }
+interface Props { app: App; locale: ProductLocale; }
 const { app, locale } = Astro.props;
 const t = copy[locale];
-const translation = app.locales[locale];
+const translation = app.locales[locale] ?? app.locales.en;
 ---
 <div class="container product-page" data-app={app.slug} style={`--app-accent: ${app.accent}`}>
-  <a class="breadcrumb" href={`${pageUrl(locale)}#apps`}><span aria-hidden="true">←</span>{t.back}</a>
+  <a class="breadcrumb" href={`${pageUrl(homeLocaleFor(locale))}#apps`}><span aria-hidden="true">←</span>{t.back}</a>
   <section class="product-hero">
     <div class="product-hero-copy">
       <div class="product-identity">

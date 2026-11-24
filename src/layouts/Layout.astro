@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { site, locales, languageInfo, type ContentLocale, type PageKind } from '../data/site';
+import { site, locales, languageInfo, homeLocaleFor, type ContentLocale, type PageKind } from '../data/site';
 import { copy } from '../lib/i18n';
 import { withBase, pageUrl } from '../lib/urls';
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 const { locale, title, description, slug, kind = 'overview', image = '/favicon.svg', noindex = false, homepage = false, availableLocales = locales, appBrand } = Astro.props;
 const t = copy[locale];
-const homeLocale = locale === 'ja' ? 'en' : locale;
+const homeLocale = homeLocaleFor(locale);
 const brand = appBrand ?? { name: site.name, href: pageUrl(homeLocale), icon: '/favicon.svg' };
 const canonical = new URL(pageUrl(locale, slug, kind), site.url).href;
 const imageUrl = new URL(withBase(image), site.url).href;
@@ -60,7 +60,7 @@ const copyright = `© ${new Date().getUTCFullYear()} ${appBrand?.name ?? t.right
         {brand.icon && <img src={withBase(brand.icon)} alt="" width="35" height="35" />}
         <span>{brand.name}</span>
       </a>
-      <nav class:list={['main-nav', { 'multilingual-nav': availableLocales.length > 2 }]} aria-label={locale === 'en' ? 'Main navigation' : locale === 'ja' ? 'メインナビゲーション' : '主导航'}>
+      <nav class:list={['main-nav', { 'multilingual-nav': availableLocales.length > 2 }]} aria-label={t.mainNav}>
         <a href={`${pageUrl(homeLocale)}#apps`}>{t.apps}</a>
         {!homepage && <a class="nav-contact" href={email}>{t.contact}</a>}
         <div class="language-options">{availableLocales.filter((language) => language !== locale).map((language) => <a class="language-switch" href={pageUrl(language, slug, kind)} lang={languageInfo[language].tag} hreflang={languageInfo[language].tag} aria-label={languageInfo[language].read}>{languageInfo[language].label}</a>)}</div>

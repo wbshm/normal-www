@@ -1,20 +1,20 @@
 ---
 import type { MarkdownHeading } from 'astro';
 import type { App } from '../lib/apps';
-import { languageInfo, type ContentLocale, type PageKind } from '../data/site';
+import { languageInfo, homeLocaleFor, productLocaleFor, type ContentLocale, type PageKind } from '../data/site';
 import { copy } from '../lib/i18n';
 import { pageUrl } from '../lib/urls';
 import AppPageNav from './AppPageNav.astro';
 interface Props { app?: App; appName?: string; locale: ContentLocale; kind: Exclude<PageKind, 'overview'>; title: string; description: string; headings: MarkdownHeading[]; updated?: string; }
 const { app, appName, locale, kind, title, description, headings, updated } = Astro.props;
 const t = copy[locale];
-const homeLocale = locale === 'ja' ? 'en' : locale;
-const name = appName ?? app?.locales[homeLocale].name;
+const productLocale = productLocaleFor(locale);
+const name = appName ?? app?.locales[productLocale]?.name;
 const sections = headings.filter((heading) => heading.depth === 2);
 const formattedDate = updated ? new Intl.DateTimeFormat(languageInfo[locale].date, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${updated}T00:00:00Z`)) : undefined;
 ---
 <div class="container document-page" style={app && `--app-accent: ${app.accent}`}>
-  <a class="breadcrumb" href={app ? pageUrl(homeLocale, app.slug) : `${pageUrl(homeLocale)}#privacy-policies`}><span aria-hidden="true">←</span>{app ? name : t.back}</a>
+  <a class="breadcrumb" href={app ? pageUrl(productLocale, app.slug) : `${pageUrl(homeLocaleFor(locale))}#privacy-policies`}><span aria-hidden="true">←</span>{app ? name : t.back}</a>
   <header class="document-header">
     <h1>{title}</h1>
     <p class="document-description">{description}</p>

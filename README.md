@@ -1,6 +1,6 @@
 # 啵啵的猫粮计划
 
-独立开发者的中英双语产品官网。收录 Anglepop、打卡鸭（CheckInDuck）、牌感（TileSense）和枫誓（MapleOath），每款 App 提供介绍、独立隐私政策和用户支持页面；牌感另提供日文隐私政策。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript；截图弹窗使用一个本地脚本增强交互。
+独立开发者的中英双语产品官网。收录 Anglepop、打卡鸭（CheckInDuck）、牌感（TileSense）、枫誓（MapleOath）和 Dayweave。每款 App 提供介绍、独立隐私政策和用户支持页面。牌感另有日文隐私政策，Dayweave 另有德语介绍、隐私政策和支持页面。Astro 生成静态 HTML，所有内容和导航均无需客户端 JavaScript；截图弹窗使用一个本地脚本增强交互。
 
 ## 本地开发
 
@@ -39,6 +39,11 @@ npm run preview
 | 枫誓 | https://wangrq.cn/apps/mapleoath/ | https://wangrq.cn/zh/apps/mapleoath/ |
 | 枫誓隐私政策 | https://wangrq.cn/apps/mapleoath/privacy/ | https://wangrq.cn/zh/apps/mapleoath/privacy/ |
 | 枫誓用户支持 | https://wangrq.cn/apps/mapleoath/support/ | https://wangrq.cn/zh/apps/mapleoath/support/ |
+| Dayweave | https://wangrq.cn/apps/dayweave/ | https://wangrq.cn/zh/apps/dayweave/ |
+| Dayweave 隐私政策 | https://wangrq.cn/apps/dayweave/privacy/ | https://wangrq.cn/zh/apps/dayweave/privacy/ |
+| Dayweave 用户支持 | https://wangrq.cn/apps/dayweave/support/ | https://wangrq.cn/zh/apps/dayweave/support/ |
+
+Dayweave 德语版提供[介绍](https://wangrq.cn/de/apps/dayweave/)、[隐私政策](https://wangrq.cn/de/apps/dayweave/privacy/)和[用户支持](https://wangrq.cn/de/apps/dayweave/support/)。
 
 牌感隐私政策的发布路径：
 
@@ -67,11 +72,11 @@ ASTRO_SITE=https://wangrq.cn ASTRO_BASE=/ SITE_ORIGIN=https://wangrq.cn npm run 
    - `slug`：永久小写英文标识，只允许字母、数字、连字符，发布后不改。
    - `category`：`game` 或 `tool`。
    - `status`：`coming-soon`、`available` 或 `archived`。
-   - `icon`、`screenshots`：文件放在 `public/images/{slug}/`，配置用 `/images/...` 逻辑路径。截图的 `src` 可以是共用路径或 `{ "en": "英文图片路径", "zh": "中文图片路径" }`；`width`、`height` 可填写图片实际尺寸，默认 780 × 1688。已合成的宣传图设置 `screenshotStyle: "poster"`，会保留完整画面并使用适合阅读的移动端布局。
+   - `icon`、`screenshots`：文件放在 `public/images/{slug}/`，配置用 `/images/...` 逻辑路径。截图的 `src` 可以是共用路径，或包含 `en` 和可选 `zh`、`de` 图片路径的对象。未指定本地化图片时使用 `en` 图片。`width`、`height` 可填写图片实际尺寸，默认 780 × 1688。已合成的宣传图设置 `screenshotStyle: "poster"`，会保留完整画面并使用适合阅读的移动端布局。
    - `platform`、`requirement`、六位十六进制 `accent`。`appStoreUrl` 可省略；状态为 `available` 时必须填写已核实的 App Store 地址。
-   - `locales.en` 和 `locales.zh`：名称、标语、简介、亮点。截图提供双语说明。
-2. 添加六份 Markdown：`src/content/apps/{slug}/{en,zh}/{overview,privacy,support}.md`。
-3. frontmatter 填 `app`、`locale`、`kind`、`title`、`description`。双语政策另填相同的 `updated: "YYYY-MM-DD"` 生效日期。
+   - `locales.en` 和 `locales.zh`：名称、标语、简介、亮点。可选 `locales.de`，并提供对应的截图说明。
+2. 添加 `src/content/apps/{slug}/{en,zh}/{overview,privacy,support}.md`。启用德语时，在 `de/` 下再添加对应的三份 Markdown。
+3. frontmatter 填 `app`、`locale`、`kind`、`title`、`description`。各语言的隐私政策另填相同的 `updated: "YYYY-MM-DD"` 生效日期。
 4. 执行 `npm run check && npm run build && npm run verify`，确认文案、真实数据处理情况和图片，再提交。
 
 页面与 sitemap 自动生成，无需改模板。所有产品介绍页统一使用「精简产品信息 → 单行横向截图 → 详细介绍 → 支持入口」顺序。截图支持触摸滑动、横向滚动和键盘方向键，使用 CSS 滚动吸附对齐。点击图片会在当前页的原生 `dialog` 弹窗中放大，支持前后切图、方向键、Esc、关闭按钮和遮罩关闭，并恢复焦点；脚本不可用时保留原始大图链接。弹窗逻辑位于 `public/scripts/screenshot-lightbox.js`，由共享的 `ScreenshotGallery.astro` 组件加载，无第三方依赖。`screenshots` 可为空，此时省略截图区、首页使用图标。每款 App 的截图语言说明由配置提供。

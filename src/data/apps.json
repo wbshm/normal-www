@@ -192,5 +192,78 @@
         "screenshotNote": "截图中的官员信息核实于 2026-11-15，以官方来源为准。"
       }
     }
+  },
+  {
+    "slug": "dayweave",
+    "category": "tool",
+    "status": "coming-soon",
+    "icon": "/images/dayweave/icon.png",
+    "screenshotStyle": "poster",
+    "screenshots": [
+      {
+        "src": { "en": "/images/dayweave/en/planner.webp", "de": "/images/dayweave/de/planner.webp" },
+        "en": "Bridge-day planner",
+        "zh": "桥接日规划",
+        "de": "Brückentage planen",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/dayweave/en/calendar.webp", "de": "/images/dayweave/de/calendar.webp" },
+        "en": "Public and school holiday calendar",
+        "zh": "公共假日与学校假期日历",
+        "de": "Feiertage und Schulferien im Kalender",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/dayweave/en/overview.webp", "de": "/images/dayweave/de/overview.webp" },
+        "en": "Leave overview",
+        "zh": "年假总览",
+        "de": "Urlaub im Überblick",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/dayweave/en/yearly-plan.webp", "de": "/images/dayweave/de/yearly-plan.webp" },
+        "en": "Yearly leave plan",
+        "zh": "全年休假方案",
+        "de": "Gesamtplan fürs Jahr",
+        "width": 880,
+        "height": 1912
+      },
+      {
+        "src": { "en": "/images/dayweave/en/balance.webp", "de": "/images/dayweave/de/balance.webp" },
+        "en": "Leave balance breakdown",
+        "zh": "年假余额明细",
+        "de": "Urlaubskonto im Detail",
+        "width": 880,
+        "height": 1912
+      }
+    ],
+    "platform": "iPhone",
+    "requirement": "iOS 17+",
+    "accent": "#dbe9ec",
+    "locales": {
+      "en": {
+        "name": "Dayweave",
+        "tagline": "Annual leave planning for Germany",
+        "description": "Find longer breaks around Germany’s public holidays, check school holiday dates and keep track of your remaining leave.",
+        "highlights": ["All 16 German states", "Bridge-day suggestions", "Offline leave tracking"]
+      },
+      "zh": {
+        "name": "Dayweave",
+        "tagline": "德国年假规划与假期日历",
+        "description": "结合德国各州的公共假日和周末，用更少年假拼出长假，同时查看学校假期和自己的年假余额。",
+        "highlights": ["覆盖德国 16 个联邦州", "桥接日建议", "离线记录年假"],
+        "screenshotNote": "App 提供德语和英语界面，截图展示英语版。"
+      },
+      "de": {
+        "name": "Dayweave",
+        "tagline": "Dein Urlaubsplaner für Deutschland",
+        "description": "Finde längere Auszeiten rund um Feiertage, sieh die Schulferien deines Bundeslands und behalte deinen Resturlaub im Blick.",
+        "highlights": ["Alle 16 Bundesländer", "Brückentage auf einen Blick", "Urlaubskonto offline"]
+      }
+    }
   }
 ]

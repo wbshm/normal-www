@@ -1,5 +1,5 @@
 ---
-import { kinds, type ContentLocale, type PageKind } from '../data/site';
+import { kinds, productLocaleFor, type ContentLocale, type PageKind } from '../data/site';
 import { copy } from '../lib/i18n';
 import { pageUrl } from '../lib/urls';
 
@@ -7,8 +7,7 @@ interface Props { slug: string; locale: ContentLocale; current: PageKind; }
 const { slug, locale, current } = Astro.props;
 const t = copy[locale];
 const labels = { overview: t.about, privacy: t.privacy, support: t.support };
-const navLabel = { en: 'App pages', zh: 'App 页面', ja: 'アプリのページ' }[locale];
 ---
-<nav class="app-page-nav" aria-label={navLabel}>
-  {kinds.map((kind) => <a href={pageUrl(locale === 'ja' && kind !== 'privacy' ? 'en' : locale, slug, kind)} aria-current={kind === current ? 'page' : undefined}>{labels[kind]}</a>)}
+<nav class="app-page-nav" aria-label={t.appPages}>
+  {kinds.map((kind) => <a href={pageUrl(kind === 'privacy' ? locale : productLocaleFor(locale), slug, kind)} aria-current={kind === current ? 'page' : undefined}>{labels[kind]}</a>)}
 </nav>

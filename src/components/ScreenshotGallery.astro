@@ -1,14 +1,20 @@
 ---
 import { screenshotSource, type App } from '../lib/apps';
-import type { Locale } from '../data/site';
+import type { ProductLocale } from '../data/site';
 import { copy } from '../lib/i18n';
 import { withBase } from '../lib/urls';
 
-interface Props { app: App; locale: Locale; }
+interface Props { app: App; locale: ProductLocale; }
 const { app, locale } = Astro.props;
 const t = copy[locale];
-const translation = app.locales[locale];
-const firstShot = app.screenshots[0];
+const translation = app.locales[locale] ?? app.locales.en;
+const screenshots = app.screenshots.map((shot) => ({
+  caption: shot[locale] ?? shot.en,
+  url: withBase(screenshotSource(shot, locale)),
+  width: shot.width,
+  height: shot.height,
+}));
+const firstShot = screenshots[0];
 const lightboxId = `${app.slug}-lightbox`;
 ---
 <section data-screenshot-gallery class:list={['screenshot-section', { 'poster-gallery': app.screenshotStyle === 'poster' }]}>
@@ -16,11 +22,11 @@ const lightboxId = `${app.slug}-lightbox`;
     <h2 id="screenshots-heading">{t.screenshots}</h2>
   </div>
   <div class="screenshot-carousel" role="region" aria-labelledby="screenshots-heading" tabindex="0">
-    {app.screenshots.map((shot) => <figure>
-      <a class="screenshot-frame" data-screenshot-trigger data-caption={shot[locale]} href={withBase(screenshotSource(shot, locale))} aria-label={`${t.fullScreenshot}: ${shot[locale]}`}>
-        <img src={withBase(screenshotSource(shot, locale))} alt={`${translation.name} — ${shot[locale]}`} width={shot.width} height={shot.height} loading="lazy" />
+    {screenshots.map((shot) => <figure>
+      <a class="screenshot-frame" data-screenshot-trigger data-caption={shot.caption} href={shot.url} aria-label={`${t.fullScreenshot}: ${shot.caption}`}>
+        <img src={shot.url} alt={`${translation.name} — ${shot.caption}`} width={shot.width} height={shot.height} loading="lazy" />
       </a>
-      <figcaption>{shot[locale]}</figcaption>
+      <figcaption>{shot.caption}</figcaption>
     </figure>)}
   </div>
   {translation.screenshotNote && <p class="screenshot-note">{translation.screenshotNote}</p>}
@@ -28,17 +34,17 @@ const lightboxId = `${app.slug}-lightbox`;
   <dialog class="screenshot-lightbox" id={lightboxId} aria-labelledby={`${lightboxId}-title`}>
     <div class="lightbox-header">
       <div class="lightbox-label" aria-live="polite" aria-atomic="true">
-        <span class="lightbox-counter" data-lightbox-counter>1 / {app.screenshots.length}</span>
-        <p id={`${lightboxId}-title`} data-lightbox-caption>{firstShot[locale]}</p>
+        <span class="lightbox-counter" data-lightbox-counter>1 / {screenshots.length}</span>
+        <p id={`${lightboxId}-title`} data-lightbox-caption>{firstShot.caption}</p>
       </div>
       <button class="lightbox-button" type="button" data-lightbox-close aria-label={t.closeScreenshot} autofocus><span aria-hidden="true">×</span></button>
     </div>
     <div class="lightbox-body">
-      <button class="lightbox-button" type="button" data-lightbox-prev aria-label={t.previousScreenshot} hidden={app.screenshots.length < 2}><span aria-hidden="true">←</span></button>
+      <button class="lightbox-button" type="button" data-lightbox-prev aria-label={t.previousScreenshot} hidden={screenshots.length < 2}><span aria-hidden="true">←</span></button>
       <div class="lightbox-image-wrap">
-        <img class="lightbox-image" data-lightbox-image src={withBase(screenshotSource(firstShot, locale))} alt={`${translation.name} — ${firstShot[locale]}`} width={firstShot.width} height={firstShot.height} loading="lazy" />
+        <img class="lightbox-image" data-lightbox-image src={firstShot.url} alt={`${translation.name} — ${firstShot.caption}`} width={firstShot.width} height={firstShot.height} loading="lazy" />
       </div>
-      <button class="lightbox-button" type="button" data-lightbox-next aria-label={t.nextScreenshot} hidden={app.screenshots.length < 2}><span aria-hidden="true">→</span></button>
+      <button class="lightbox-button" type="button" data-lightbox-next aria-label={t.nextScreenshot} hidden={screenshots.length < 2}><span aria-hidden="true">→</span></button>
     </div>
   </dialog>
 </section>

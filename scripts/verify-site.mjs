@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
-import { join } from 'node:path';
 import config from '../astro.config.mjs';
 
 const root = new URL('../dist/', import.meta.url);
@@ -15,6 +14,9 @@ assert(siteName, 'Verification requires the public site name.');
 const files = await readdir(root, { recursive: true });
 const htmlFiles = files.filter((file) => file.endsWith('.html'));
 const sitemap = await readFile(new URL('sitemap.xml', root), 'utf8');
+const languageTags = { en: 'en', zh: 'zh-CN', de: 'de', ja: 'ja' };
+const prefixFor = (locale) => locale === 'en' ? '' : `${locale}/`;
+const appPageKinds = ['overview', 'privacy', 'support'];
 const policyRoutes = [
   { prefix: '', locale: 'en' },
   { prefix: 'zh/', locale: 'zh-CN' },
@@ -40,6 +42,19 @@ function verifyScripts(html, label) {
   }
 }
 
+function verifyAlternates(html, file, routes) {
+  const alternates = [...html.matchAll(/<link\b[^>]*>/g)].map((match) => attributes(match[0])).filter((link) => link.rel === 'alternate');
+  const expected = [...routes, { locale: 'x-default', path: routes.find((route) => route.locale === 'en').path }];
+  assert.equal(alternates.length, expected.length, `${file}: incorrect number of language alternates.`);
+  for (const target of expected) {
+    assert(alternates.some((link) => link.hreflang === target.locale && link.href === new URL(target.path, origin).href), `${file}: incorrect ${target.locale} alternate.`);
+  }
+  const anchors = [...html.matchAll(/<a\b[^>]*>/g)].map((match) => attributes(match[0]));
+  for (const target of routes.filter((route) => route.file !== file)) {
+    assert(anchors.some((link) => link.hreflang === target.locale && new URL(link.href, origin).pathname === target.path), `${file}: missing ${target.locale} language switch.`);
+  }
+}
+
 for (const file of htmlFiles) {
   const html = await readFile(new URL(file, root), 'utf8');
   const logicalPath = file === 'index.html' ? '/' : file.endsWith('/index.html') ? `/${file.slice(0, -10)}` : `/${file}`;
@@ -47,7 +62,7 @@ for (const file of htmlFiles) {
   assert.equal((html.match(/<h1(?:\s|>)/g) ?? []).length, 1, `${file}: expected exactly one h1.`);
   verifyScripts(html, file);
   assert(!/href=""|src=""|Lorem ipsum|TODO|example\.com|\[(?:你的名字|你的邮箱|Your (?:name|email)|あなたの名前|あなたのメールアドレス)\]/.test(html), `${file}: empty or placeholder content.`);
-  const expectedLocale = file.startsWith('zh/') ? 'zh-CN' : file.startsWith('ja/') ? 'ja' : 'en';
+  const expectedLocale = languageTags[file.split('/')[0]] ?? languageTags.en;
   assert(html.includes(`<html lang="${expectedLocale}"`), `${file}: document language must be ${expectedLocale}.`);
   assert(/name="description"\s+content="[^"]+"/.test(html), `${file}: description is required.`);
   if (file !== '404.html') {
@@ -76,28 +91,40 @@ for (const file of htmlFiles) {
 
 const apps = JSON.parse(await readFile(new URL('../src/data/apps.json', import.meta.url), 'utf8'));
 const additionalPolicies = policyRoutes.filter((route) => route.locale !== 'en' && route.locale !== 'zh-CN');
-assert.equal(htmlFiles.length, 3 + apps.length * 6 + additionalPolicies.length, 'Expected two homepages, six pages per app, an extra Japanese TileSense policy, and a 404 page.');
+const appPageCount = apps.reduce((count, app) => count + Object.keys(app.locales).length * appPageKinds.length, 0);
+assert.equal(htmlFiles.length, 3 + appPageCount + additionalPolicies.length, 'Expected two homepages, three pages per app language, the extra policies, and a 404 page.');
 for (const app of apps) {
-  for (const prefix of ['', 'zh/']) {
-    const locale = prefix ? 'zh' : 'en';
-    const product = await readFile(new URL(`${prefix}apps/${app.slug}/index.html`, root), 'utf8');
-    const home = await readFile(new URL(`${prefix}index.html`, root), 'utf8');
+  const appLocales = Object.keys(app.locales);
+  for (const [locale, translation] of Object.entries(app.locales)) {
+    const prefix = prefixFor(locale);
+    const productFile = `${prefix}apps/${app.slug}/index.html`;
+    const product = await readFile(new URL(productFile, root), 'utf8');
+    const home = locale === 'en' || locale === 'zh' ? await readFile(new URL(`${prefix}index.html`, root), 'utf8') : undefined;
     assert.equal((product.match(/<figure>/g) ?? []).length, app.screenshots.length, `${app.slug}: screenshot count mismatch.`);
     assert(!product.includes('screenshots-hint'), `${app.slug}/${locale}: redundant screenshot instructions must not be rendered.`);
-    assert.equal((product.match(/class="screenshot-note"/g) ?? []).length, app.locales[locale].screenshotNote ? 1 : 0, `${app.slug}/${locale}: only app-specific screenshot notices should be rendered.`);
-    assert(!home.includes('class="preview-note"'), `${locale}: homepage screenshots must not repeat the app tagline.`);
+    assert.equal((product.match(/class="screenshot-note"/g) ?? []).length, translation.screenshotNote ? 1 : 0, `${app.slug}/${locale}: only app-specific screenshot notices should be rendered.`);
+    assert(!home?.includes('class="preview-note"'), `${locale}: homepage screenshots must not repeat the app tagline.`);
     for (const [index, shot] of app.screenshots.entries()) {
-      const source = typeof shot.src === 'string' ? shot.src : shot.src[locale];
+      const source = typeof shot.src === 'string' ? shot.src : shot.src[locale] ?? shot.src.en;
       assert(product.includes(`src="${base}${source}"`), `${app.slug}/${locale}: localized screenshot missing: ${source}`);
       assert(product.includes(`href="${base}${source}"`), `${app.slug}/${locale}: full-size screenshot link missing: ${source}`);
-      if (index < 2 && app.status !== 'archived') assert(home.includes(`src="${base}${source}"`), `${app.slug}/${locale}: homepage screenshot missing.`);
+      if (home && index < 2 && app.status !== 'archived') assert(home.includes(`src="${base}${source}"`), `${app.slug}/${locale}: homepage screenshot missing.`);
       if (typeof shot.src !== 'string') {
-        const otherSource = shot.src[locale === 'en' ? 'zh' : 'en'];
-        if (otherSource !== source) assert(!product.includes(`src="${base}${otherSource}"`), `${app.slug}/${locale}: screenshot from the wrong language.`);
+        for (const otherSource of Object.values(shot.src)) {
+          if (otherSource !== source) assert(!product.includes(`src="${base}${otherSource}"`), `${app.slug}/${locale}: screenshot from the wrong language.`);
+        }
       }
     }
-    for (const kind of ['privacy', 'support']) {
-      const content = await readFile(new URL(join(prefix, 'apps', app.slug, kind, 'index.html'), root), 'utf8');
+    for (const kind of appPageKinds) {
+      const suffix = kind === 'overview' ? '' : `${kind}/`;
+      const file = `${prefix}apps/${app.slug}/${suffix}index.html`;
+      const content = kind === 'overview' ? product : await readFile(new URL(file, root), 'utf8');
+      const routes = appLocales.map((language) => {
+        const path = `${prefixFor(language)}apps/${app.slug}/${suffix}`;
+        return { locale: languageTags[language], path: `${base}/${path}`, file: `${path}index.html` };
+      });
+      if (app.slug !== 'tilesense' || kind !== 'privacy') verifyAlternates(content, file, routes);
+      if (kind === 'overview') continue;
       assert(content.includes(publicEmail), `${app.slug}/${kind}: public contact missing.`);
       if (kind === 'privacy') assert(content.includes('<time datetime='), `${app.slug}: policy effective date missing.`);
       if (app.slug === 'mapleoath' && kind === 'privacy') {
@@ -114,16 +141,7 @@ for (const app of apps) {
 const policyDates = new Set();
 for (const route of policyRoutes) {
   const html = await readFile(new URL(route.file, root), 'utf8');
-  const alternates = [...html.matchAll(/<link\b[^>]*>/g)].map((match) => attributes(match[0])).filter((link) => link.rel === 'alternate');
-  const expectedAlternates = [...policyRoutes, { locale: 'x-default', path: policyRoutes[0].path }];
-  assert.equal(alternates.length, expectedAlternates.length, `${route.file}: expected exactly four language alternates.`);
-  for (const alternate of expectedAlternates) {
-    assert(alternates.some((link) => link.hreflang === alternate.locale && link.href === new URL(alternate.path, origin).href), `${route.file}: incorrect ${alternate.locale} alternate.`);
-  }
-  const anchors = [...html.matchAll(/<a\b[^>]*>/g)].map((match) => attributes(match[0]));
-  for (const alternate of policyRoutes.filter((target) => target.locale !== route.locale)) {
-    assert(anchors.some((link) => link.hreflang === alternate.locale && new URL(link.href, origin).pathname === alternate.path), `${route.file}: missing ${alternate.locale} language switch.`);
-  }
+  verifyAlternates(html, route.file, policyRoutes);
   assert.equal((html.match(/<h2(?:\s|>)/g) ?? []).length, 8, `${route.file}: expected eight policy sections.`);
   const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/)?.[1];
   assert(article?.includes(publicEmail), `${route.file}: policy body must include the public contact email.`);
