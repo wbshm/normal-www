@@ -25,7 +25,7 @@ const {
   description,
   slug,
   kind = 'overview',
-  image = '/favicon.svg',
+  image = site.icon,
   noindex = false,
   homepage = false,
   availableLocales = locales,
@@ -37,7 +37,7 @@ const {
 } = Astro.props;
 const t = copy[locale];
 const homeLocale = homeLocaleFor(locale);
-const brand = appBrand ?? { name: site.name, href: pageUrl(homeLocale), icon: '/favicon.svg' };
+const brand = appBrand ?? { name: site.name, href: pageUrl(homeLocale), icon: site.icon };
 const canonical = new URL(canonicalPath ? withBase(canonicalPath) : pageUrl(locale, slug, kind), site.url).href;
 const resolvedAlternates = alternateLinks
   ? alternateLinks.map((item) => ({ locale: item.locale, href: withBase(item.href) }))
@@ -64,7 +64,7 @@ const resolvedAppStoreId = appStoreId ?? (slug === 'dayweave' ? '6836203431' : u
       {resolvedAlternates.map((item) => <link rel="alternate" hreflang={languageInfo[item.locale].tag} href={new URL(item.href, site.url).href} />)}
       {defaultAlternate && <link rel="alternate" hreflang="x-default" href={new URL(defaultAlternate.href, site.url).href} />}
     </>}
-    <link rel="icon" href={withBase(brand.icon ?? '/favicon.svg')} />
+    <link rel="icon" href={withBase(brand.icon ?? site.icon)} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={brand.name} />
     <meta property="og:title" content={title} />
