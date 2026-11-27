@@ -58,6 +58,8 @@ fi
   npm run build
   npm run verify
   node --input-type=module -e 'import { readFileSync } from "node:fs"; if (!readFileSync("dist/index.html", "utf8").includes("rel=\"canonical\" href=\"https://wangrq.cn/\"")) throw new Error("HEAD must include the wangrq.cn build configuration");'
+  # The Search Console verification file is a static asset served only by wangrq.cn.
+  cp deploy/server/google97cf6693f59c5689.html dist/
 )
 printf '%s\n' "$RELEASE" > "$WORK/dist/deploy-version.txt"
 
