@@ -1,0 +1,414 @@
+---
+import '../styles/brueckentage.css';
+import Arrow from './Arrow.astro';
+import BrueckentagePlanner from './BrueckentagePlanner.astro';
+import {
+  brueckentageOverviewPath,
+  brueckentageStatePath,
+  DAYWEAVE_APP_STORE_URL,
+  formatDateLong,
+  formatDateRange,
+  formatMultiplier,
+  formatWeekdayLong,
+  GERMAN_STATES,
+  getBridgeOpportunities,
+  getStateSpecificHolidays,
+  getStateYearSummary,
+  SUPPORTED_YEARS,
+  type BrueckentageLocale,
+  type GermanStateInfo,
+  type SupportedYear,
+} from '../lib/brueckentage';
+import {
+  buildOverviewFaqs,
+  buildStateFaqs,
+  buildStateIntro,
+  uiCopy,
+} from '../lib/brueckentage-copy';
+import { pageUrl, withBase } from '../lib/urls';
+
+interface Props {
+  locale: BrueckentageLocale;
+  year: SupportedYear;
+  state?: GermanStateInfo;
+}
+
+const { locale, year, state } = Astro.props;
+const t = uiCopy[locale];
+const appStoreUrl = DAYWEAVE_APP_STORE_URL[locale];
+const dayweaveOverviewUrl = pageUrl(locale, 'dayweave', 'overview');
+const dayweavePrivacyUrl = pageUrl(locale, 'dayweave', 'privacy');
+const dayweaveSupportUrl = pageUrl(locale, 'dayweave', 'support');
+const overviewUrl = withBase(brueckentageOverviewPath(locale, year));
+
+const stateSummary = state ? getStateYearSummary(year, state.code) : undefined;
+const allStateSummaries = state ? [] : GERMAN_STATES.map((st) => getStateYearSummary(year, st.code));
+const nationwideOpps = state ? [] : getBridgeOpportunities(year, 'ALL');
+const extraHolidays = state ? [] : getStateSpecificHolidays(year);
+
+const faqs = stateSummary
+  ? buildStateFaqs(locale, stateSummary)
+  : buildOverviewFaqs(locale, year, nationwideOpps);
+
+const h1 = state ? t.h1State(year, state.name[locale]) : t.h1Overview(year);
+const intro = stateSummary ? buildStateIntro(locale, stateSummary) : t.introOverview[year];
+const eyebrow = state ? t.eyebrowState(year, state.code) : t.eyebrowOverview(year);
+
+// Nationwide KPI metrics for overview
+const nationwideBest = !state
+  ? [...nationwideOpps].sort((a, b) => b.efficiency - a.efficiency || b.freeDays - a.freeDays)[0]
+  : stateSummary?.bestSingleOpportunity;
+const nationwideRec = !state ? nationwideOpps.filter((o) => o.recommended) : [];
+const nationwideRecLeave = nationwideRec.reduce((s, o) => s + o.leaveDays, 0);
+const nationwideRecFree = nationwideRec.reduce((s, o) => s + o.freeDays, 0);
+const maxStateWorkday = allStateSummaries.length
+  ? Math.max(...allStateSummaries.map((s) => s.workdayHolidayCount))
+  : 0;
+const minStateWorkday = allStateSummaries.length
+  ? Math.min(...allStateSummaries.map((s) => s.workdayHolidayCount))
+  : 0;
+---
+<div class="container bt-page" data-app="dayweave">
+  <nav class="bt-breadcrumbs" aria-label="Breadcrumb">
+    <a href={dayweaveOverviewUrl}>{t.backToApp}</a>
+    <span aria-hidden="true">/</span>
+    {state ? (
+      <>
+        <a href={overviewUrl}>{t.overviewCrumb(year)}</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{state.name[locale]}</span>
+      </>
+    ) : (
+      <span aria-current="page">{t.overviewCrumb(year)}</span>
+    )}
+  </nav>
+
+  <section class="bt-hero">
+    <div class="bt-hero-top">
+      <span class="bt-eyebrow">{eyebrow}</span>
+      <nav class="bt-year-switch" aria-label={t.yearSwitchLabel}>
+        {SUPPORTED_YEARS.map((y) => {
+          const href = withBase(state ? brueckentageStatePath(locale, y, state) : brueckentageOverviewPath(locale, y));
+          return (
+            <a href={href} aria-current={y === year ? 'page' : undefined}>
+              {y}
+            </a>
+          );
+        })}
+      </nav>
+    </div>
+
+    <h1>{h1}</h1>
+    <p class="bt-hero-intro">{intro}</p>
+
+    <div class="bt-kpi-grid">
+      {stateSummary ? (
+        <>
+          <div class="bt-kpi">
+            <span class="bt-kpi-label">{t.kpiWorkdayHolidays}</span>
+            <strong class="bt-kpi-value">{stateSummary.workdayHolidayCount} / {stateSummary.holidays.length}</strong>
+          </div>
+          <div class="bt-kpi">
+            <span class="bt-kpi-label">{t.kpiWeekendHolidays}</span>
+            <strong class="bt-kpi-value">{stateSummary.weekendHolidayCount}</strong>
+          </div>
+          <div class="bt-kpi">
+            <span class="bt-kpi-label">{t.kpiBestRatio}</span>
+            <strong class="bt-kpi-value">
+              {nationwideBest ? `${nationwideBest.leaveDays} → ${nationwideBest.freeDays} (${formatMultiplier(nationwideBest.efficiency, locale)})` : '–'}
+            </strong>
+          </div>
+          <div class="bt-kpi bt-kpi--highlight">
+            <span class="bt-kpi-label">{t.kpiRecommended}</span>
+            <strong class="bt-kpi-value">{stateSummary.recommendedPlan.leaveDays} → {stateSummary.recommendedPlan.freeDays}</strong>
+          </div>
+        </>
+      ) : (
+        <>
+          <div class="bt-kpi">
+            <span class="bt-kpi-label">{t.kpiWorkdayHolidays}</span>
+            <strong class="bt-kpi-value">{minStateWorkday}–{maxStateWorkday}</strong>
+          </div>
+          <div class="bt-kpi">
+            <span class="bt-kpi-label">{t.kpiBestRatio}</span>
+            <strong class="bt-kpi-value">
+              {nationwideBest ? `${nationwideBest.leaveDays} → ${nationwideBest.freeDays} (${formatMultiplier(nationwideBest.efficiency, locale)})` : '–'}
+            </strong>
+          </div>
+          <div class="bt-kpi bt-kpi--highlight">
+            <span class="bt-kpi-label">{t.kpiRecommended}</span>
+            <strong class="bt-kpi-value">{nationwideRecLeave} → {nationwideRecFree}</strong>
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  {state ? (
+    <nav class="bt-state-pills" aria-label={t.stateSwitcherLabel}>
+      <a class="bt-pill bt-pill--all" href={overviewUrl}>{t.allStatesLink}</a>
+      {GERMAN_STATES.map((st) => (
+        <a
+          class="bt-pill"
+          href={withBase(brueckentageStatePath(locale, year, st))}
+          aria-current={st.code === state.code ? 'page' : undefined}
+        >
+          {st.name[locale]}
+        </a>
+      ))}
+    </nav>
+  ) : (
+    <section class="bt-section" id="bundeslaender">
+      <div class="bt-section-head">
+        <div>
+          <h2>{t.stateGridHeading(year)}</h2>
+          <p class="bt-lead">{t.stateGridLead}</p>
+        </div>
+      </div>
+      <div class="bt-state-grid">
+        {allStateSummaries.map((item) => (
+          <a class="bt-state-card" href={withBase(brueckentageStatePath(locale, year, item.state))}>
+            <div class="bt-state-card-top">
+              <span class="bt-state-code">{item.state.code}</span>
+              <span class="bt-state-holidays">{item.workdayHolidayCount} {t.workdayBadge}</span>
+            </div>
+            <strong>{item.state.name[locale]}</strong>
+            <span class="bt-state-meta">
+              {t.leaveShort(item.recommendedPlan.leaveDays)} → {t.freeShort(item.recommendedPlan.freeDays)}
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {stateSummary ? (
+    <BrueckentagePlanner
+      locale={locale}
+      year={year}
+      opportunities={stateSummary.opportunities}
+      showSchoolColumn={true}
+      heading={t.statePlannerHeading(year, stateSummary.state.name[locale])}
+      lead={t.statePlannerLead}
+      sectionId="planer"
+    />
+  ) : (
+    <BrueckentagePlanner
+      locale={locale}
+      year={year}
+      opportunities={nationwideOpps}
+      showSchoolColumn={false}
+      showStateJump={true}
+      heading={t.nationwideHeading(year)}
+      lead={t.nationwideLead}
+      sectionId="planer"
+    />
+  )}
+
+  {stateSummary ? (
+    <>
+      <section class="bt-section bt-panel" id="feiertage">
+        <div class="bt-section-head">
+          <div>
+            <h2>{t.holidaysHeading(year, stateSummary.state.name[locale])}</h2>
+          </div>
+        </div>
+        <div class="bt-table-wrap">
+          <table class="bt-table">
+            <thead>
+              <tr>
+                <th scope="col">{t.colDate}</th>
+                <th scope="col">{t.colWeekday}</th>
+                <th scope="col">{t.colHoliday}</th>
+                <th scope="col">{t.colStatus}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stateSummary.holidays.map((h) => (
+                <tr class:list={[{ 'is-weekend-row': !h.isWorkday }]}>
+                  <td class="bt-dates">{formatDateLong(h.date, locale, true).replace(/^[^,]+,\s*/, '')}</td>
+                  <td>{formatWeekdayLong(h.weekday, locale)}</td>
+                  <td class="bt-holiday-name">{h.name[locale]}</td>
+                  <td>
+                    <span class:list={['bt-badge', h.isWorkday ? 'bt-badge--workday' : 'bt-badge--weekend']}>
+                      {h.isWorkday ? t.workdayBadge : t.weekendBadge}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {stateSummary.state.regionalNote && (
+          <p class="bt-note">{stateSummary.state.regionalNote[locale]}</p>
+        )}
+      </section>
+
+      <section class="bt-section bt-panel" id="schulferien">
+        <div class="bt-section-head">
+          <div>
+            <h2>{t.schoolBreaksHeading(year, stateSummary.state.name[locale])}</h2>
+            <p class="bt-lead">{t.schoolBreaksLead}</p>
+          </div>
+        </div>
+        <div class="bt-table-wrap">
+          <table class="bt-table">
+            <thead>
+              <tr>
+                <th scope="col">{t.colBreakName}</th>
+                <th scope="col">{t.colPeriod}</th>
+                <th scope="col" class="bt-col-num">{t.colDuration}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stateSummary.schoolBreaks.map((sb) => (
+                <tr>
+                  <td class="bt-holiday-name">{sb.name[locale]}</td>
+                  <td class="bt-dates">{formatDateRange(sb.start, sb.end, locale, true)}</td>
+                  <td class="bt-col-num">{t.daysUnit(sb.days)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </>
+  ) : (
+    <>
+      <section class="bt-section bt-panel" id="vergleich">
+        <div class="bt-section-head">
+          <div>
+            <h2>{t.comparisonHeading(year)}</h2>
+            <p class="bt-lead">{t.comparisonLead}</p>
+          </div>
+        </div>
+        <div class="bt-table-wrap">
+          <table class="bt-table">
+            <thead>
+              <tr>
+                <th scope="col">{t.colState}</th>
+                <th scope="col" class="bt-col-num">{t.colWorkdayHolidays}</th>
+                <th scope="col">{t.colExtraHolidays}</th>
+                <th scope="col" class="bt-col-num">{t.colBestBridge}</th>
+                <th scope="col">{t.colAction}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allStateSummaries.map((item) => {
+                const extras = item.holidays.filter((h) => h.states !== 'ALL' && h.isWorkday);
+                return (
+                  <tr>
+                    <td class="bt-holiday-name">
+                      <a class="bt-inline-link" href={withBase(brueckentageStatePath(locale, year, item.state))}>
+                        {item.state.name[locale]}
+                      </a>
+                    </td>
+                    <td class="bt-col-num">{item.workdayHolidayCount} / {item.holidays.length}</td>
+                    <td class="bt-muted-small">
+                      {extras.length > 0 ? extras.map((h) => h.name[locale]).join(', ') : '–'}
+                    </td>
+                    <td class="bt-col-num">
+                      <span class="bt-num-strong">{item.recommendedPlan.leaveDays}</span>
+                      <span class="bt-arrow-sep" aria-hidden="true">→</span>
+                      <span class="bt-num-free">{item.recommendedPlan.freeDays}</span>
+                    </td>
+                    <td>
+                      <a class="bt-table-link" href={withBase(brueckentageStatePath(locale, year, item.state))}>
+                        {t.viewState}
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="bt-section bt-panel" id="landesfeiertage">
+        <div class="bt-section-head">
+          <div>
+            <h2>{t.extraHolidaysHeading(year)}</h2>
+            <p class="bt-lead">{t.extraHolidaysLead}</p>
+          </div>
+        </div>
+        <div class="bt-table-wrap">
+          <table class="bt-table">
+            <thead>
+              <tr>
+                <th scope="col">{t.colDate}</th>
+                <th scope="col">{t.colHoliday}</th>
+                <th scope="col">{t.colStates}</th>
+                <th scope="col">{t.colStatus}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {extraHolidays.map((h) => (
+                <tr class:list={[{ 'is-weekend-row': !h.isWorkday }]}>
+                  <td class="bt-dates">{formatDateLong(h.date, locale, true)}</td>
+                  <td class="bt-holiday-name">{h.name[locale]}</td>
+                  <td class="bt-muted-small">{Array.isArray(h.states) ? h.states.join(', ') : ''}</td>
+                  <td>
+                    <span class:list={['bt-badge', h.isWorkday ? 'bt-badge--workday' : 'bt-badge--weekend']}>
+                      {h.isWorkday ? t.workdayBadge : t.weekendBadge}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </>
+  )}
+
+  <section class="bt-section bt-panel" id="faq">
+    <div class="bt-section-head">
+      <div>
+        <h2>{t.faqHeading}</h2>
+      </div>
+    </div>
+    <div class="bt-faq-list">
+      {faqs.map((item, idx) => (
+        <details class="bt-faq-item" open={idx === 0}>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="bt-section bt-cta" aria-labelledby="dayweave-app-cta">
+    <div class="bt-cta-copy">
+      <div class="bt-cta-header">
+        <img class="app-icon" src={withBase('/images/dayweave/icon.png')} alt="" width="64" height="64" />
+        <div>
+          <span class="bt-eyebrow">{t.ctaEyebrow}</span>
+          <h2 id="dayweave-app-cta">{t.ctaTitle}</h2>
+        </div>
+      </div>
+      <p class="bt-cta-body">{t.ctaBody}</p>
+      <ul class="bt-cta-list">
+        {t.ctaBullets.map((bullet) => <li>{bullet}</li>)}
+      </ul>
+    </div>
+    <div class="bt-cta-actions">
+      <a class="button primary bt-store-btn" href={appStoreUrl} target="_blank" rel="noopener">
+        {t.ctaButton}
+        <Arrow diagonal />
+      </a>
+      <a class="button bt-secondary-btn" href={dayweaveOverviewUrl}>
+        {t.ctaSecondary}
+      </a>
+    </div>
+  </section>
+
+  <p class="bt-disclaimer">
+    {t.disclaimerPrefix}{' '}
+    <a href="https://www.kmk.org/service/ferienregelung.html" target="_blank" rel="noopener">{t.kmkLabel}</a>.
+    {' · '}
+    <a href={dayweavePrivacyUrl}>{t.privacyLink}</a>
+    {' · '}
+    <a href={dayweaveSupportUrl}>{t.supportLink}</a>
+  </p>
+</div>

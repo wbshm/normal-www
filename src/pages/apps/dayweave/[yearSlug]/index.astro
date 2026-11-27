@@ -1,0 +1,23 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import BrueckentagePage from '../../../../components/BrueckentagePage.astro';
+import { SUPPORTED_YEARS, type SupportedYear } from '../../../../lib/brueckentage';
+import { buildBrueckentageLayoutProps } from '../../../../lib/brueckentage-seo';
+
+export function getStaticPaths() {
+  return SUPPORTED_YEARS.map((year) => ({
+    params: { yearSlug: `bridge-days-${year}` },
+    props: { year },
+  }));
+}
+
+interface Props {
+  year: SupportedYear;
+}
+
+const { year } = Astro.props;
+const layoutProps = buildBrueckentageLayoutProps('en', year);
+---
+<Layout {...layoutProps}>
+  <BrueckentagePage locale="en" year={year} />
+</Layout>

@@ -1,0 +1,171 @@
+---
+import {
+  formatDateRange,
+  formatLeaveDates,
+  formatMultiplier,
+  brueckentageStatePath,
+  GERMAN_STATES,
+  type BridgeOpportunity,
+  type BrueckentageLocale,
+  type SupportedYear,
+} from '../lib/brueckentage';
+import { uiCopy } from '../lib/brueckentage-copy';
+import { withBase } from '../lib/urls';
+
+interface Props {
+  locale: BrueckentageLocale;
+  year: SupportedYear;
+  opportunities: BridgeOpportunity[];
+  showSchoolColumn: boolean;
+  showStateJump?: boolean;
+  heading: string;
+  lead: string;
+  sectionId?: string;
+}
+
+const {
+  locale,
+  year,
+  opportunities,
+  showSchoolColumn,
+  showStateJump = false,
+  heading,
+  lead,
+  sectionId = 'planer',
+} = Astro.props;
+
+const t = uiCopy[locale];
+const defaultBudget = 30;
+const initialRec = opportunities.filter((o) => o.recommended);
+const initialLeave = initialRec.reduce((sum, o) => sum + o.leaveDays, 0);
+const initialFree = initialRec.reduce((sum, o) => sum + o.freeDays, 0);
+const initialRemaining = defaultBudget - initialLeave;
+const initialRatio = initialLeave > 0 ? formatMultiplier(initialFree / initialLeave, locale) : '–';
+---
+<section class="bt-section bt-panel" id={sectionId} data-bridge-planner data-locale={locale} data-overlap-notice={t.overlapNotice} data-over-budget-notice={t.overBudgetNotice}>
+  <div class="bt-section-head">
+    <div>
+      <h2>{heading}</h2>
+      <p class="bt-lead">{lead}</p>
+    </div>
+    {showStateJump && (
+      <div class="bt-jump-control">
+        <label for={`state-jump-${year}`}>{t.jumpStateLabel}</label>
+        <select id={`state-jump-${year}`} class="bt-select" data-state-jump>
+          <option value="">{t.jumpStatePlaceholder}</option>
+          {GERMAN_STATES.map((st) => (
+            <option value={withBase(brueckentageStatePath(locale, year, st))}>{st.name[locale]}</option>
+          ))}
+        </select>
+      </div>
+    )}
+  </div>
+
+  <div class="bt-toolbar">
+    <div class="bt-budget">
+      <label for={`budget-${year}`}>{t.budgetLabel}</label>
+      <div class="bt-stepper">
+        <button type="button" class="bt-step-btn" data-budget-dec aria-label="-1">−</button>
+        <input id={`budget-${year}`} type="number" min="0" max="60" value={defaultBudget} inputmode="numeric" data-budget-input />
+        <button type="button" class="bt-step-btn" data-budget-inc aria-label="+1">+</button>
+      </div>
+      <span class="bt-budget-unit">{t.budgetUnit}</span>
+    </div>
+
+    <div class="bt-actions">
+      <button type="button" class="bt-chip-btn" data-action-recommended>{t.btnRecommended}</button>
+      <button type="button" class="bt-chip-btn bt-chip-btn--ghost" data-action-clear>{t.btnClear}</button>
+    </div>
+  </div>
+
+  <div class="bt-summary-bar" aria-live="polite">
+    <div class="bt-stat">
+      <span class="bt-stat-label">{t.statSelectedLeave}</span>
+      <strong class="bt-stat-value" data-stat-leave>{initialLeave}</strong>
+    </div>
+    <div class="bt-stat bt-stat--accent">
+      <span class="bt-stat-label">{t.statTotalFree}</span>
+      <strong class="bt-stat-value" data-stat-free>{initialFree}</strong>
+    </div>
+    <div class="bt-stat">
+      <span class="bt-stat-label">{t.statRemaining}</span>
+      <strong class="bt-stat-value" data-stat-remaining>{initialRemaining}</strong>
+    </div>
+    <div class="bt-stat">
+      <span class="bt-stat-label">{t.statRatio}</span>
+      <strong class="bt-stat-value" data-stat-ratio>{initialRatio}</strong>
+    </div>
+  </div>
+
+  <p class="bt-notice" data-planner-notice hidden></p>
+
+  <div class="bt-table-wrap">
+    <table class="bt-table bt-planner-table">
+      <thead>
+        <tr>
+          <th scope="col" class="bt-col-check">{t.colPlan}</th>
+          <th scope="col">{t.colOccasion}</th>
+          <th scope="col">{t.colLeaveDates}</th>
+          <th scope="col">{t.colFreeRange}</th>
+          <th scope="col" class="bt-col-num">{t.colRatio}</th>
+          {showSchoolColumn && <th scope="col">{t.colSchool}</th>}
+        </tr>
+      </thead>
+      <tbody>
+        {opportunities.map((opp) => {
+          const overlaps = opp.schoolBreakOverlaps[locale];
+          const inputId = `opp-${opp.id}`;
+          return (
+            <tr
+              class:list={[{ 'is-selected': opp.recommended }]}
+              data-opportunity-row
+              data-start={opp.start}
+              data-end={opp.end}
+              data-leave={opp.leaveDays}
+              data-free={opp.freeDays}
+              data-recommended={String(opp.recommended)}
+            >
+              <td class="bt-col-check">
+                <input
+                  id={inputId}
+                  type="checkbox"
+                  checked={opp.recommended}
+                  aria-label={t.checkboxLabel(opp.occasion[locale], opp.leaveDays, opp.freeDays)}
+                />
+              </td>
+              <td>
+                <label class="bt-row-title" for={inputId}>
+                  <span>{opp.occasion[locale]}</span>
+                  {opp.isClassicBridge && <span class="bt-badge bt-badge--classic">{t.classicTag}</span>}
+                </label>
+                <div class="bt-row-sub">{opp.detail[locale]}</div>
+              </td>
+              <td class="bt-dates">{formatLeaveDates(opp.leaveDates, locale)}</td>
+              <td class="bt-dates">{formatDateRange(opp.start, opp.end, locale)}</td>
+              <td class="bt-col-num">
+                <div class="bt-ratio-main">
+                  <span class="bt-num-strong">{opp.leaveDays}</span>
+                  <span class="bt-arrow-sep" aria-hidden="true">→</span>
+                  <span class="bt-num-free">{opp.freeDays}</span>
+                </div>
+                <div class="bt-ratio-sub">
+                  {formatMultiplier(opp.efficiency, locale)}
+                </div>
+              </td>
+              {showSchoolColumn && (
+                <td>
+                  {overlaps.length > 0 ? (
+                    <span class="bt-badge bt-badge--school">{overlaps.join(', ')}</span>
+                  ) : (
+                    <span class="bt-muted-small">{t.noSchoolOverlap}</span>
+                  )}
+                </td>
+              )}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+</section>
+<script type="module" src={withBase('/scripts/brueckentage-planner.js')}></script>

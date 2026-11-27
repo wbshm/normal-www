@@ -1,0 +1,26 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+import BrueckentagePage from '../../../../../components/BrueckentagePage.astro';
+import { GERMAN_STATES, SUPPORTED_YEARS, type GermanStateInfo, type SupportedYear } from '../../../../../lib/brueckentage';
+import { buildBrueckentageLayoutProps } from '../../../../../lib/brueckentage-seo';
+
+export function getStaticPaths() {
+  return SUPPORTED_YEARS.flatMap((year) =>
+    GERMAN_STATES.map((state) => ({
+      params: { yearSlug: `brueckentage-${year}`, stateSlug: state.slug.de },
+      props: { year, state },
+    })),
+  );
+}
+
+interface Props {
+  year: SupportedYear;
+  state: GermanStateInfo;
+}
+
+const { year, state } = Astro.props;
+const layoutProps = buildBrueckentageLayoutProps('de', year, state);
+---
+<Layout {...layoutProps}>
+  <BrueckentagePage locale="de" year={year} state={state} />
+</Layout>

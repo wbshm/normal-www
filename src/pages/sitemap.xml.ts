@@ -1,11 +1,16 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { site, locales } from '../data/site';
-import { pageUrl } from '../lib/urls';
+import { pageUrl, withBase } from '../lib/urls';
+import { getAllBrueckentagePaths } from '../lib/brueckentage';
 
 export const GET: APIRoute = async () => {
   const entries = await getCollection('pages');
-  const paths = [...locales.map((locale) => pageUrl(locale)), ...entries.map(({ data }) => pageUrl(data.locale, data.app, data.kind))];
+  const paths = [
+    ...locales.map((locale) => pageUrl(locale)),
+    ...entries.map(({ data }) => pageUrl(data.locale, data.app, data.kind)),
+    ...getAllBrueckentagePaths().map((path) => withBase(path)),
+  ];
   const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((path) => `<url><loc>${new URL(path, site.url).href}</loc></url>`).join('')}</urlset>`;
   return new Response(xml, { headers: { 'Content-Type': 'application/xml; charset=utf-8' } });
 };

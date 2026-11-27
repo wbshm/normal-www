@@ -33,12 +33,28 @@ const attributes = (tag) => Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]
 function verifyScripts(html, label) {
   const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   const hasGallery = html.includes('data-screenshot-gallery');
-  assert.equal(scripts.length, hasGallery ? 1 : 0, `${label}: only screenshot galleries may load a client script.`);
+  const hasPlanner = html.includes('data-bridge-planner');
+  const executable = [];
   for (const script of scripts) {
     const attrs = attributes(script[1]);
-    assert.equal(attrs.type, 'module', `${label}: the image viewer must use a module script.`);
-    assert.equal(attrs.src, `${base}/scripts/screenshot-lightbox.js`, `${label}: unexpected client script.`);
-    assert.equal(script[2].trim(), '', `${label}: unexpected inline script.`);
+    if (attrs.type === 'application/ld+json') {
+      assert(hasPlanner, `${label}: JSON-LD scripts are only expected on bridge-day pages.`);
+      assert(!attrs.src, `${label}: JSON-LD script must not load an external src.`);
+      assert.doesNotThrow(() => JSON.parse(script[2]), `${label}: invalid JSON-LD payload.`);
+      continue;
+    }
+    executable.push({ attrs, body: script[2] });
+  }
+  const expectedCount = (hasGallery ? 1 : 0) + (hasPlanner ? 1 : 0);
+  assert.equal(executable.length, expectedCount, `${label}: unexpected number of client scripts.`);
+  const allowedSources = new Set([
+    ...(hasGallery ? [`${base}/scripts/screenshot-lightbox.js`] : []),
+    ...(hasPlanner ? [`${base}/scripts/brueckentage-planner.js`] : []),
+  ]);
+  for (const { attrs, body } of executable) {
+    assert.equal(attrs.type, 'module', `${label}: client scripts must use type="module".`);
+    assert(allowedSources.has(attrs.src), `${label}: unexpected client script ${attrs.src}.`);
+    assert.equal(body.trim(), '', `${label}: unexpected inline script.`);
   }
 }
 
@@ -65,10 +81,12 @@ for (const file of htmlFiles) {
   const expectedLocale = languageTags[file.split('/')[0]] ?? languageTags.en;
   assert(html.includes(`<html lang="${expectedLocale}"`), `${file}: document language must be ${expectedLocale}.`);
   assert(/name="description"\s+content="[^"]+"/.test(html), `${file}: description is required.`);
+  const isBridgePage = html.includes('data-bridge-planner');
   if (file !== '404.html') {
     assert(html.includes(`rel="canonical" href="${url.href}"`), `${file}: canonical URL mismatch.`);
     assert(sitemap.includes(`<loc>${url.href}</loc>`), `${file}: missing from sitemap.`);
-    for (const lang of ['en', 'zh-CN', 'x-default']) {
+    const requiredLangs = isBridgePage ? ['de', 'en', 'x-default'] : ['en', 'zh-CN', 'x-default'];
+    for (const lang of requiredLangs) {
       assert(html.includes(`hreflang="${lang}"`), `${file}: missing ${lang} alternate.`);
     }
   }
@@ -90,9 +108,47 @@ for (const file of htmlFiles) {
 }
 
 const apps = JSON.parse(await readFile(new URL('../src/data/apps.json', import.meta.url), 'utf8'));
+const bridgeYears = [2027, 2028];
+const bridgeStates = [
+  { de: 'baden-wuerttemberg', en: 'baden-wuerttemberg' },
+  { de: 'bayern', en: 'bavaria' },
+  { de: 'berlin', en: 'berlin' },
+  { de: 'brandenburg', en: 'brandenburg' },
+  { de: 'bremen', en: 'bremen' },
+  { de: 'hamburg', en: 'hamburg' },
+  { de: 'hessen', en: 'hesse' },
+  { de: 'mecklenburg-vorpommern', en: 'mecklenburg-western-pomerania' },
+  { de: 'niedersachsen', en: 'lower-saxony' },
+  { de: 'nordrhein-westfalen', en: 'north-rhine-westphalia' },
+  { de: 'rheinland-pfalz', en: 'rhineland-palatinate' },
+  { de: 'saarland', en: 'saarland' },
+  { de: 'sachsen', en: 'saxony' },
+  { de: 'sachsen-anhalt', en: 'saxony-anhalt' },
+  { de: 'schleswig-holstein', en: 'schleswig-holstein' },
+  { de: 'thueringen', en: 'thuringia' },
+];
+const bridgePairs = bridgeYears.flatMap((year) => [
+  [
+    { locale: 'de', file: `de/apps/dayweave/brueckentage-${year}/index.html`, path: `${base}/de/apps/dayweave/brueckentage-${year}/` },
+    { locale: 'en', file: `apps/dayweave/bridge-days-${year}/index.html`, path: `${base}/apps/dayweave/bridge-days-${year}/` },
+  ],
+  ...bridgeStates.map((st) => [
+    { locale: 'de', file: `de/apps/dayweave/brueckentage-${year}/${st.de}/index.html`, path: `${base}/de/apps/dayweave/brueckentage-${year}/${st.de}/` },
+    { locale: 'en', file: `apps/dayweave/bridge-days-${year}/${st.en}/index.html`, path: `${base}/apps/dayweave/bridge-days-${year}/${st.en}/` },
+  ]),
+]);
 const additionalPolicies = policyRoutes.filter((route) => route.locale !== 'en' && route.locale !== 'zh-CN');
 const appPageCount = apps.reduce((count, app) => count + Object.keys(app.locales).length * appPageKinds.length, 0);
-assert.equal(htmlFiles.length, 3 + appPageCount + additionalPolicies.length, 'Expected two homepages, three pages per app language, the extra policies, and a 404 page.');
+const bridgePageCount = bridgePairs.length * 2;
+assert.equal(htmlFiles.length, 3 + appPageCount + additionalPolicies.length + bridgePageCount, 'Expected two homepages, three pages per app language, the extra policies, Dayweave bridge-day pages, and a 404 page.');
+for (const pair of bridgePairs) {
+  for (const route of pair) {
+    const html = await readFile(new URL(route.file, root), 'utf8');
+    verifyAlternates(html, route.file, pair);
+    assert(html.includes('name="apple-itunes-app" content="app-id=6836203431"'), `${route.file}: missing Smart App Banner meta tag.`);
+    assert(html.includes('id6836203431'), `${route.file}: missing Dayweave App Store link.`);
+  }
+}
 for (const app of apps) {
   const appLocales = Object.keys(app.locales);
   for (const [locale, translation] of Object.entries(app.locales)) {
@@ -187,4 +243,4 @@ if (process.env.SITE_ORIGIN) {
     console.log(`HTTP ${response.status} ${url.href}`);
   }
 }
-console.log(`Verified ${htmlFiles.length} HTML pages, ${checkedLinks} local links/assets, canonical URLs, language alternates, policy contacts, dates, and sitemap. Only the local screenshot viewer script is allowed; page content and navigation remain static.`);
+console.log(`Verified ${htmlFiles.length} HTML pages, ${checkedLinks} local links/assets, canonical URLs, language alternates, policy contacts, dates, bridge-day pages, and sitemap.`);
